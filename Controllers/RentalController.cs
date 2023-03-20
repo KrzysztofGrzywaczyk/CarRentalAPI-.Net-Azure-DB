@@ -55,6 +55,40 @@ namespace CarRentalAPI.Controllers
             }
         }
 
+
+        [HttpPut("{id}")]
+        public ActionResult<RentalOfficeDto> Get([FromBody] RentalOfficeUpdateDto dto, [FromRoute] int id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var rental = _dbContext.rentalOffices
+                .Include(r => r.Address)
+                .Include(r => r.Cars)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+
+            }
+
+            rental.Name = dto.Name;
+            rental.Description = dto.Description;
+            rental.Category = dto.Category;
+            rental.AcceptUnder23 = dto.AcceptUnder23;
+            rental.ConntactEmail = dto.ConntactEmail;
+            rental.ConntactNumber = dto.ConntactNumber;
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+
+        }
+
         [HttpPost]
         public ActionResult CreateRentalOffice([FromBody] CreateRentalOfficeDto dto)
         {
@@ -69,6 +103,25 @@ namespace CarRentalAPI.Controllers
 
             return Created($"/api/rentaloffices/{rentalOffice.Id}", null);
         }
-      
+
+        [HttpDelete("{id}")]
+
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var rental = _dbContext.rentalOffices
+                .FirstOrDefault(r => r.Id == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+                    
+            }
+
+            _dbContext.rentalOffices.Remove(rental);
+            _dbContext.SaveChanges();
+
+            return NoContent();
+
+        }
     }
 }
