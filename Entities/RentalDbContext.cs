@@ -7,7 +7,7 @@ namespace CarRentalAPI.Entities
 
     {
 
-        private string ConnectionString { get; set; }
+        private string? ConnectionString { get; set; }
         public DbSet<RentalOffice> rentalOffices { get; set; }
         public DbSet<Address> addresses { get; set; }
         public DbSet<Car> cars { get; set; }

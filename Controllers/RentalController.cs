@@ -1,60 +1,55 @@
 ﻿using AutoMapper;
 using CarRentalAPI.Entities;
+using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace CarRentalAPI.Controllers
 {
     [Route("api/rentaloffices")]
     public class RentalController : ControllerBase
     {
-        private readonly RentalDbContext _dbContext;
+        private readonly RentalDbContext dbContext;
 
-        private readonly IMapper _mapper;
+        private readonly IMapper mapper;
 
-        public RentalController(RentalDbContext dbContext, IMapper mapper)
+        private readonly IDeleteRentalHandler deleteRentalHandler;
+
+        private readonly IGetRentalHandler getRentalHandler;
+
+        private readonly IPostRentalHandler postRentalHandler;
+
+        private readonly IPutRentalHandler putRentalHandler;
+        
+
+        public RentalController(RentalDbContext dbContext, IMapper mapper, IDeleteRentalHandler deleteRentalHandler , IGetRentalHandler getRentalHandler, IPutRentalHandler putRentalHandler, IPostRentalHandler postRentalHandler)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            this.dbContext = dbContext;
+            this.deleteRentalHandler = deleteRentalHandler;
+            this.getRentalHandler = getRentalHandler;
+            this.mapper = mapper;
+            this.postRentalHandler = postRentalHandler;
+            this.putRentalHandler = putRentalHandler;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<RentalOfficeDto>> GetAll()
         {
-            var rentals = _dbContext.rentalOffices
-                .Include(r => r.Address)
-                .Include(r => r.Cars)
-                .ToList();
-
-            var rentalsDto = _mapper.Map<List<RentalOfficeDto>>(rentals);
-
-            return Ok(rentalsDto);
+            return Ok(getRentalHandler.HandleGetAllRequest());
         }
 
         [HttpGet("{id}")]
         public ActionResult<RentalOfficeDto> Get([FromRoute] int id) 
         {
-            var rental = _dbContext.rentalOffices
-                .Include(r => r.Address)
-                .Include(r => r.Cars)
-                .FirstOrDefault(r => r.Id == id);
+            var rentalDto = getRentalHandler.HandleGetByIdRequest(id);
 
-            
-
-            if (rental == null)
+            if (rentalDto != null)
             {
-                return NotFound();
-            }
-            else
-            {
-                var rentalDto = _mapper.Map<RentalOfficeDto>(rental);
                 return Ok(rentalDto);
             }
+            return NotFound();
         }
-
 
         [HttpPut("{id}")]
         public ActionResult<RentalOfficeDto> Get([FromBody] RentalOfficeUpdateDto dto, [FromRoute] int id)
@@ -65,28 +60,8 @@ namespace CarRentalAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var rental = _dbContext.rentalOffices
-                .Include(r => r.Address)
-                .Include(r => r.Cars)
-                .FirstOrDefault(r => r.Id == id);
-
-            if (rental == null)
-            {
-                return NotFound();
-
-            }
-
-            rental.Name = dto.Name;
-            rental.Description = dto.Description;
-            rental.Category = dto.Category;
-            rental.AcceptUnder23 = dto.AcceptUnder23;
-            rental.ConntactEmail = dto.ConntactEmail;
-            rental.ConntactNumber = dto.ConntactNumber;
-
-            _dbContext.SaveChanges();
-
-            return Ok();
-
+            bool success = putRentalHandler.HandlePutById(dto, id);
+            return success ? Ok() : BadRequest(); 
         }
 
         [HttpPost]
@@ -97,31 +72,18 @@ namespace CarRentalAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var rentalOffice = _mapper.Map<RentalOffice>(dto);
-            _dbContext.rentalOffices.Add(rentalOffice);
-            _dbContext.SaveChanges();
+            var path = postRentalHandler.HandlePostRental(dto);
 
-            return Created($"/api/rentaloffices/{rentalOffice.Id}", null);
+            return Created(path, null);
         }
 
         [HttpDelete("{id}")]
 
         public ActionResult Delete([FromRoute] int id)
         {
-            var rental = _dbContext.rentalOffices
-                .FirstOrDefault(r => r.Id == id);
-
-            if (rental == null)
-            {
-                return NotFound();
-                    
-            }
-
-            _dbContext.rentalOffices.Remove(rental);
-            _dbContext.SaveChanges();
-
-            return NoContent();
-
+                        
+            bool success = deleteRentalHandler.HandleDeleteRental(id);
+            return success ? NoContent() : NotFound();
         }
     }
 }
