@@ -1,6 +1,4 @@
 ﻿using CarRentalAPI.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.OpenApi.Models;
 
 namespace CarRentalAPI
 {
