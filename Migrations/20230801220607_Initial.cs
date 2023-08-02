@@ -16,8 +16,8 @@ namespace CarRentalAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

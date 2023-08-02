@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalAPI.Migrations
 {
     [DbContext(typeof(RentalDbContext))]
-    [Migration("20230319192825_AddressColumnAdjastments")]
-    partial class AddressColumnAdjastments
+    [Migration("20230801220607_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
