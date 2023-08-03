@@ -6,19 +6,19 @@ namespace CarRentalAPI.Models
     {
         [Required]
         [MaxLength(25)]
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Category { get; set; }
         public bool AcceptUnder23 { get; set; }
-        public string ConntactEmail { get; set; }
-        public string ConntactNumber { get; set; }
+        public string? ConntactEmail { get; set; }
+        public string? ConntactNumber { get; set; }
         [Required]
         [MaxLength(30)]
-        public string City { get; set; }
+        public string? City { get; set; }
         [Required]
         [MaxLength(30)]
-        public string Street { get; set; }
-        public string PostalCode { get; set; }
+        public string? Street { get; set; }
+        public string? PostalCode { get; set; }
 
     }
 }

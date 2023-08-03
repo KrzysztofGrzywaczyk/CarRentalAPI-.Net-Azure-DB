@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CarRentalAPI.Entities;
-using CarRentalAPI.Handlers;
+using CarRentalAPI.Services;
 using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,35 +14,26 @@ namespace CarRentalAPI.Controllers
 
         private readonly IMapper mapper;
 
-        private readonly IDeleteRentalHandler deleteRentalHandler;
-
-        private readonly IGetRentalHandler getRentalHandler;
-
-        private readonly IPostRentalHandler postRentalHandler;
-
-        private readonly IPutRentalHandler putRentalHandler;
+        private readonly IRentalService rentalService;
         
 
-        public RentalController(RentalDbContext dbContext, IMapper mapper, IDeleteRentalHandler deleteRentalHandler , IGetRentalHandler getRentalHandler, IPutRentalHandler putRentalHandler, IPostRentalHandler postRentalHandler)
+        public RentalController(RentalDbContext dbContext, IMapper mapper, IRentalService rentalService)
         {
             this.dbContext = dbContext;
-            this.deleteRentalHandler = deleteRentalHandler;
-            this.getRentalHandler = getRentalHandler;
             this.mapper = mapper;
-            this.postRentalHandler = postRentalHandler;
-            this.putRentalHandler = putRentalHandler;
+            this.rentalService = rentalService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<RentalOfficeDto>> GetAll()
         {
-            return Ok(getRentalHandler.HandleGetAllRequest());
+            return Ok(rentalService.GetRentalAll());
         }
 
         [HttpGet("{id}")]
         public ActionResult<RentalOfficeDto> Get([FromRoute] int id) 
         {
-            var rentalDto = getRentalHandler.HandleGetByIdRequest(id);
+            var rentalDto = rentalService.GetRentalById(id);
 
             if (rentalDto != null)
             {
@@ -60,7 +51,7 @@ namespace CarRentalAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool success = putRentalHandler.HandlePutById(dto, id);
+            bool success = rentalService.PutRentalById(dto, id);
             return success ? Ok() : BadRequest(); 
         }
 
@@ -72,7 +63,7 @@ namespace CarRentalAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var path = postRentalHandler.HandlePostRental(dto);
+            var path = rentalService.CreateRental(dto);
 
             return Created(path, null);
         }
@@ -82,7 +73,7 @@ namespace CarRentalAPI.Controllers
         public ActionResult Delete([FromRoute] int id)
         {
                         
-            bool success = deleteRentalHandler.HandleDeleteRental(id);
+            bool success = rentalService.DeleteRental(id);
             return success ? NoContent() : NotFound();
         }
     }
