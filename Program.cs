@@ -1,6 +1,7 @@
 using CarRentalAPI;
 using CarRentalAPI.Configuration;
 using CarRentalAPI.Entities;
+using CarRentalAPI.Middlewares;
 using CarRentalAPI.Services;
 using NLog;
 using NLog.Config;
@@ -23,6 +24,7 @@ builder.Services.AddTransient<IRentalService, RentalService>();
 builder.Services.AddSingleton(config.Get<RentalDbContextConfiguration>() ?? throw new ArgumentNullException(nameof(config), "Configuration is required to retrieve RentalDbContextConfig"));
 builder.Services.AddDbContext<RentalDbContext>();
 builder.Services.AddScoped<RentalSeeder>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -33,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // RentalSeeder.Seed();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
