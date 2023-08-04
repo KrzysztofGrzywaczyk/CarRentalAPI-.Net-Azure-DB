@@ -1,26 +1,37 @@
 ﻿using AutoMapper;
 using CarRentalAPI.Entities;
+using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using NLog;
 
 namespace CarRentalAPI.Services
 {
     public class RentalService : IRentalService
     {
+        private const string entityType = "Rental";
         public readonly RentalDbContext dbContext;
-        public readonly IMapper mapper;
         public readonly ILogger<RentalService> logger;
-        public RentalService(RentalDbContext dbContext, ILogger<RentalService> logger, IMapper mapper)
+        public readonly ILogHandler logHandler;
+        public readonly IMapper mapper;
+        public RentalService(RentalDbContext dbContext, ILogger<RentalService> logger,ILogHandler logHandler , IMapper mapper)
         {
             this.dbContext = dbContext;
             this.logger = logger;
+            this.logHandler = logHandler;
             this.mapper = mapper;
+        }
+
+        private static void NullRentalCheck(RentalOffice rentalOffice, int id)
+        {
+            if (rentalOffice == null)
+            {
+                throw new FileNotFoundException($"Rental with id {id} not found");
+            }
         }
 
         public string CreateRental(CreateRentalOfficeDto dto)
         {
-            this.logger.LogInformation("Rental POST request received.");
+            this.logHandler.LogNewRequest(entityType, "post");
 
             var rentalOffice = this.mapper.Map<RentalOffice>(dto);
             this.dbContext.rentalOffices.Add(rentalOffice);
@@ -31,28 +42,24 @@ namespace CarRentalAPI.Services
             return path;
         }
 
-        public bool DeleteRental(int id)
+        public void DeleteRental(int id)
         {
-            this.logger.LogInformation("Rental DELETE request received.");
+            this.logHandler.LogNewRequest(entityType, "delete");
             var rentalOffice = this.dbContext.rentalOffices
                 .FirstOrDefault(r => r.Id == id);
-            if (rentalOffice == null)
-            {
-                return false;
 
-            }
+            NullRentalCheck(rentalOffice!, id);
 
-            this.dbContext.rentalOffices.Remove(rentalOffice);
+            this.dbContext.rentalOffices.Remove(rentalOffice!);
             this.dbContext.SaveChanges();
 
             this.logger.LogWarning("New Rental with id {0} deleted", rentalOffice.Id);
-
-            return true;
+            
         }
 
         public IEnumerable<RentalOfficeDto> GetRentalAll()
         {
-            this.logger.LogInformation("Rental GET request received.");
+            this.logHandler.LogNewRequest(entityType, "get");
             var rentals = this.dbContext.rentalOffices
                 .Include(r => r.Address)
                 .Include(r => r.Cars)
@@ -65,33 +72,29 @@ namespace CarRentalAPI.Services
 
         public RentalOfficeDto GetRentalById(int id)
         {
-            this.logger.LogInformation("Rental GET request received.");
-            var rental = this.dbContext.rentalOffices
+            this.logHandler.LogNewRequest(entityType, "get");
+            var rentalOffice = this.dbContext.rentalOffices
                 .Include(r => r.Address)
                 .Include(r => r.Cars)
                 .FirstOrDefault(r => r.Id == id);
 
-            if (rental != null)
-            {
-                var rentalDto = this.mapper.Map<RentalOfficeDto>(rental);
-                return rentalDto;
-            }
-            return null!;
+            NullRentalCheck(rentalOffice!, id);
+
+            var rentalDto = this.mapper.Map<RentalOfficeDto>(rentalOffice);
+            return rentalDto;
+
         }
 
-        public bool PutRentalById(RentalOfficeUpdateDto dto, int id)
+        public void PutRentalById(RentalOfficeUpdateDto dto, int id)
         {
-            this.logger.LogInformation("Rental PUT request received.");
+            this.logHandler.LogNewRequest(entityType, "put");
 
             var rentalOffice = this.dbContext.rentalOffices
                 .Include(r => r.Address)
                 .Include(r => r.Cars)
                 .FirstOrDefault(r => r.Id == id);
 
-            if (rentalOffice == null)
-            {
-                return false;
-            }
+            NullRentalCheck(rentalOffice!, id);
 
             rentalOffice.Name = dto.Name;
             rentalOffice.Description = dto.Description;
@@ -103,8 +106,8 @@ namespace CarRentalAPI.Services
             this.dbContext.SaveChanges();
 
             this.logger.LogInformation("New Rental with id {0} created", rentalOffice.Id);
-
-            return true;
         }
+
+        
     }
 }

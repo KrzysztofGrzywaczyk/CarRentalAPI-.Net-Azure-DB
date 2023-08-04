@@ -15,6 +15,8 @@ namespace CarRentalAPI
 
             CreateMap<Car, CarDto>();
 
+            CreateMap<CreateCarDto, Car>();
+
             CreateMap<CreateRentalOfficeDto, RentalOffice>()
                 .ForMember(r => r.Address, conf => conf.MapFrom(dto => new Address()
                 { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }

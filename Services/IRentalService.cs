@@ -6,12 +6,12 @@ namespace CarRentalAPI.Services
     {
         public string CreateRental(CreateRentalOfficeDto dto);
 
-        public bool DeleteRental(int id);
+        public void DeleteRental(int id);
         
         public IEnumerable<RentalOfficeDto> GetRentalAll();
         
         public RentalOfficeDto GetRentalById(int id);
         
-        public bool PutRentalById(RentalOfficeUpdateDto dto, int id);
+        public void PutRentalById(RentalOfficeUpdateDto dto, int id);
     }
 }

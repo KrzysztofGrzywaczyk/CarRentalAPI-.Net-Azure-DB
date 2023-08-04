@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarRentalAPI.Controllers
 {
     [Route("api/rentaloffices")]
+    [ApiController]
     public class RentalController : ControllerBase
     {
         private readonly RentalDbContext dbContext;
@@ -51,8 +52,8 @@ namespace CarRentalAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool success = rentalService.PutRentalById(dto, id);
-            return success ? Ok() : BadRequest(); 
+            rentalService.PutRentalById(dto, id);
+            return Ok();
         }
 
         [HttpPost]
@@ -73,8 +74,8 @@ namespace CarRentalAPI.Controllers
         public ActionResult Delete([FromRoute] int id)
         {
                         
-            bool success = rentalService.DeleteRental(id);
-            return success ? NoContent() : NotFound();
+            rentalService.DeleteRental(id);
+            return NoContent();
         }
     }
 }

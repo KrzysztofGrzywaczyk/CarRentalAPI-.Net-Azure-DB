@@ -1,6 +1,7 @@
 using CarRentalAPI;
 using CarRentalAPI.Configuration;
 using CarRentalAPI.Entities;
+using CarRentalAPI.Handlers;
 using CarRentalAPI.Middlewares;
 using CarRentalAPI.Services;
 using NLog;
@@ -20,11 +21,14 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<ICarService, CarService>();
+builder.Services.AddTransient<ILogHandler, LogHandler>();
 builder.Services.AddTransient<IRentalService, RentalService>();
 builder.Services.AddSingleton(config.Get<RentalDbContextConfiguration>() ?? throw new ArgumentNullException(nameof(config), "Configuration is required to retrieve RentalDbContextConfig"));
 builder.Services.AddDbContext<RentalDbContext>();
 builder.Services.AddScoped<RentalSeeder>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeMiddleware>();
 
 var app = builder.Build();
 
@@ -37,6 +41,7 @@ if (app.Environment.IsDevelopment())
 // RentalSeeder.Seed();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeMiddleware>();
 
 app.UseHttpsRedirection();
 

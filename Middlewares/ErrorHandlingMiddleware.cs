@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using CarRentalAPI.Exceptions;
+using System.Runtime.InteropServices;
 
 namespace CarRentalAPI.Middlewares
 {
@@ -14,6 +15,11 @@ namespace CarRentalAPI.Middlewares
             try
             {
                 await next.Invoke(context);
+            }
+            catch (NotFoundException ex)
+            {
+                context.Response.StatusCode = 404;
+                await CreateErrorMessageAsync(context, ex);
             }
             catch (Exception ex)
             {

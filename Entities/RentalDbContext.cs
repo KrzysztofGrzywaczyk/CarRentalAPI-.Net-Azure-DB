@@ -33,7 +33,7 @@ namespace CarRentalAPI.Entities
             modelBuilder.Entity<Address>()
                 .Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength (30);
+                .HasMaxLength(45);
 
         }
 
