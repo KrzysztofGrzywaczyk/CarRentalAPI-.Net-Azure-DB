@@ -24,7 +24,7 @@ namespace CarRentalAPI.Services
 
         public string CreateCar(int rentalID, CreateCarDto dto)
         {
-            this.logHandler.LogNewRequest(entityType, "post");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.POST);
 
             var rentalOffice = this.dbContext.rentalOffices.FirstOrDefault(r => r.Id == rentalID);
             if (rentalOffice is null)
@@ -37,6 +37,8 @@ namespace CarRentalAPI.Services
 
             this.dbContext.cars.Add(carEntity);
             this.dbContext.SaveChanges();
+
+            this.logHandler.LogAction(ILogHandler.ActionEnum.Created, carEntity.Id);
 
             var path = $"/api/{rentalID}/cars/{carEntity.Id}";
             return path;

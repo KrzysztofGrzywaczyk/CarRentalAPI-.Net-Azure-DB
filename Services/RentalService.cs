@@ -31,20 +31,21 @@ namespace CarRentalAPI.Services
 
         public string CreateRental(CreateRentalOfficeDto dto)
         {
-            this.logHandler.LogNewRequest(entityType, "post");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.POST);
 
             var rentalOffice = this.mapper.Map<RentalOffice>(dto);
             this.dbContext.rentalOffices.Add(rentalOffice);
             this.dbContext.SaveChanges();
 
-            this.logger.LogInformation("New Rental with id {0} created", rentalOffice.Id);
+            this.logHandler.LogAction(ILogHandler.ActionEnum.Created, rentalOffice.Id);
+
             string path = $"/api/rentaloffices/{rentalOffice.Id}";
             return path;
         }
 
         public void DeleteRental(int id)
         {
-            this.logHandler.LogNewRequest(entityType, "delete");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.DELETE);
             var rentalOffice = this.dbContext.rentalOffices
                 .FirstOrDefault(r => r.Id == id);
 
@@ -53,13 +54,13 @@ namespace CarRentalAPI.Services
             this.dbContext.rentalOffices.Remove(rentalOffice!);
             this.dbContext.SaveChanges();
 
-            this.logger.LogWarning("New Rental with id {0} deleted", rentalOffice.Id);
+            this.logHandler.LogAction(ILogHandler.ActionEnum.Deleted, rentalOffice.Id); ;
             
         }
 
         public IEnumerable<RentalOfficeDto> GetRentalAll()
         {
-            this.logHandler.LogNewRequest(entityType, "get");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
             var rentals = this.dbContext.rentalOffices
                 .Include(r => r.Address)
                 .Include(r => r.Cars)
@@ -72,7 +73,7 @@ namespace CarRentalAPI.Services
 
         public RentalOfficeDto GetRentalById(int id)
         {
-            this.logHandler.LogNewRequest(entityType, "get");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
             var rentalOffice = this.dbContext.rentalOffices
                 .Include(r => r.Address)
                 .Include(r => r.Cars)
@@ -87,7 +88,7 @@ namespace CarRentalAPI.Services
 
         public void PutRentalById(RentalOfficeUpdateDto dto, int id)
         {
-            this.logHandler.LogNewRequest(entityType, "put");
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.PUT);
 
             var rentalOffice = this.dbContext.rentalOffices
                 .Include(r => r.Address)
@@ -96,7 +97,7 @@ namespace CarRentalAPI.Services
 
             NullRentalCheck(rentalOffice!, id);
 
-            rentalOffice.Name = dto.Name;
+            rentalOffice!.Name = dto.Name;
             rentalOffice.Description = dto.Description;
             rentalOffice.Category = dto.Category;
             rentalOffice.AcceptUnder23 = dto.AcceptUnder23;
@@ -105,7 +106,7 @@ namespace CarRentalAPI.Services
 
             this.dbContext.SaveChanges();
 
-            this.logger.LogInformation("New Rental with id {0} created", rentalOffice.Id);
+            this.logHandler.LogAction(ILogHandler.ActionEnum.Updated, rentalOffice.Id);
         }
 
         

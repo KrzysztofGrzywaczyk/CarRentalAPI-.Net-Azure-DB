@@ -1,7 +1,24 @@
-﻿namespace CarRentalAPI.Handlers
+﻿using static CarRentalAPI.Handlers.LogHandler;
+
+namespace CarRentalAPI.Handlers
 {
     public interface ILogHandler
     {
-        public void LogNewRequest(string objectType, string requestType);
+        public enum ActionEnum
+        {
+            Created,
+            Deleted,
+            Updated
+        }
+
+        public enum RequestEnum
+        {
+            GET,
+            POST,
+            PUT,
+            DELETE,
+        }
+        public void LogNewRequest(string objectType, RequestEnum requestType);
+        public void LogAction(ActionEnum actionType, int entityId);
     }
 }
