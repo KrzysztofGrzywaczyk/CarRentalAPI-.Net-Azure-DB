@@ -17,20 +17,20 @@ namespace CarRentalAPI.Controllers
         [HttpGet]
         public ActionResult GetAllCars([FromRoute] int rentalId)
         {
-            return Ok();
+            return Ok(carService.GetCarAll(rentalId));
         }
 
         [HttpGet("{id}")]
         public ActionResult GetCar([FromRoute] int rentalId, [FromRoute] int id) 
         {
-            return Ok();
+            return Ok(carService.GetCarById(rentalId, id));
         }
 
         [HttpPost]
         public ActionResult CreateCar([FromRoute] int rentalId, [FromBody] CreateCarDto dto)
         {
             var path = carService.CreateCar(rentalId, dto);
-            return Created("path", null);
+            return Created(path, null);
         }
         
     }

@@ -43,5 +43,31 @@ namespace CarRentalAPI.Services
             var path = $"/api/{rentalID}/cars/{carEntity.Id}";
             return path;
         }
+
+        public IEnumerable<CarDto> GetCarAll(int rentalId)
+        {
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
+
+            var cars = this.dbContext.cars
+                .Where(c => c.RentalOfficeId == rentalId)
+                .ToList();
+
+            var carDtos = this.mapper.Map<List<CarDto>>(cars);
+
+            return carDtos;
+        }
+
+        public CarDto GetCarById(int rentalId, int carId) 
+        {
+            this.logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
+
+            var car = this.dbContext.cars.
+                FirstOrDefault(c => (c.RentalOfficeId == rentalId && c.Id == carId));
+
+            var carDto = this.mapper.Map<CarDto>(car);
+
+            return carDto;
+
+        }
     }
 }

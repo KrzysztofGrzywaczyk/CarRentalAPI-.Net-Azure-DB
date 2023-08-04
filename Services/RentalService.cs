@@ -66,9 +66,9 @@ namespace CarRentalAPI.Services
                 .Include(r => r.Cars)
                 .ToList();
 
-            var rentalsDto = this.mapper.Map<List<RentalOfficeDto>>(rentals);
+            var rentalDtos = this.mapper.Map<List<RentalOfficeDto>>(rentals);
 
-            return rentalsDto;
+            return rentalDtos;
         }
 
         public RentalOfficeDto GetRentalById(int id)

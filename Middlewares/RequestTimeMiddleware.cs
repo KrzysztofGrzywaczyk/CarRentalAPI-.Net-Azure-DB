@@ -21,7 +21,7 @@ namespace CarRentalAPI.Middlewares
 
             var elapsedTime = stopwatch.ElapsedMilliseconds;
 
-            if (elapsedTime / 100 >= 4) 
+            if (elapsedTime >= 5000) 
             {
                 var message = $"{context.Request.Method} request at {context.Request.Path} took {elapsedTime} ms";
 
