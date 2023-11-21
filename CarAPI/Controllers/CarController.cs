@@ -3,9 +3,9 @@ using CarRentalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalAPI.Controllers
-{
-    [Route("api/rentals/{rentalId}/cars")]
+{ 
     [ApiController]
+    [Route("api/rentals/{rentalId}/cars")]
     public class CarController : ControllerBase
     {
         public readonly ICarService carService;
