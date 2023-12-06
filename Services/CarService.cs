@@ -54,14 +54,14 @@ namespace CarRentalAPI.Services
 
         }
 
-        public IEnumerable<PresentCarDto> GetAllCarsInBase()
+        public IEnumerable<PresentCarAllCarsDto> GetAllCarsInBase()
         {
             _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
 
             var cars = _dbContext.cars
                 .ToList();
 
-            var carDtos = _mapper.Map<List<PresentCarDto>>(cars);
+            var carDtos = _mapper.Map<List<PresentCarAllCarsDto>>(cars);
 
             return carDtos;
         }

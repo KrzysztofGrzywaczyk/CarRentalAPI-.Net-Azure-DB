@@ -15,6 +15,8 @@ namespace CarRentalAPI
 
             CreateMap<Car, PresentCarDto>();
 
+            CreateMap<Car, PresentCarAllCarsDto>();
+
             CreateMap<CreateCarDto, Car>();
 
             CreateMap<CreateRentalOfficeDto, RentalOffice>()

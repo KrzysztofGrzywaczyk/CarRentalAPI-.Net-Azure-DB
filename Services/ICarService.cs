@@ -9,7 +9,7 @@ namespace CarRentalAPI.Services
 
         public void DeleteCar(int rentalID, int carId);
 
-        public IEnumerable<PresentCarDto> GetAllCarsInBase();
+        public IEnumerable<PresentCarAllCarsDto> GetAllCarsInBase();
 
         public IEnumerable<PresentCarDto> GetAllCarsInRental(int rentalId);
 
