@@ -43,7 +43,7 @@ namespace CarRentalAPI.Services
 
         public void DeleteCar(int rentalId, int carId)
         {
-            _ = LoadRentalOfficeIfExist(rentalId);
+            LoadRentalOfficeIfExist(rentalId);
             
             var carEntity = GetCarIfExist(rentalId, carId);
 

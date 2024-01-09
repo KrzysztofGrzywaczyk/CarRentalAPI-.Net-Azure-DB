@@ -12,6 +12,9 @@ namespace CarRentalAPI.Entities
         public DbSet<Address> addresses { get; set; }
         public DbSet<Car> cars { get; set; }
 
+        public DbSet<User> users { get; set; }
+        public DbSet<Role> roles { get; set; }
+
         public RentalDbContext(RentalDbContextConfiguration config)
         {
             _ConnectionString = config.DatabaseConnectionString;
@@ -34,6 +37,13 @@ namespace CarRentalAPI.Entities
                 .Property(a => a.Street)
                 .IsRequired()
                 .HasMaxLength(45);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired();
+            modelBuilder.Entity<Role>()
+                .Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(30);
 
         }
 

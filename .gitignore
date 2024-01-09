@@ -11,3 +11,6 @@
 /.vs/ProjectEvaluation/carrentalapi.metadata.v6.1
 /.vs/ProjectEvaluation/carrentalapi.projects.v6.1
 /.vs/CarRentalAPI/FileContentIndex/bcaddef5-f896-4009-b49d-dfc1aace8f41.vsidx
+*.testlog
+*.manifest
+

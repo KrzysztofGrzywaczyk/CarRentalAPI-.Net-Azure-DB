@@ -16,7 +16,7 @@ namespace CarRentalAPI.Handlers
             GET,
             POST,
             PUT,
-            DELETE,
+            DELETE
         }
         public void LogNewRequest(string objectType, RequestEnum requestType);
         public void LogAction(ActionEnum actionType, int rentalId);
