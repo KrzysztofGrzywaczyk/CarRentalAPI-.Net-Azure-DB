@@ -61,6 +61,7 @@ builder.Services.AddDbContext<RentalDbContext>();
 builder.Services.AddScoped<RentalSeeder>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<AddUserDto>, AddUserValidator>();
+builder.Services.AddScoped<IValidator<UserUpdateDto>, UserUpdateValidator>();
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
@@ -73,11 +74,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<RentalSeeder>();
     seeder.SeedBasicRoles();
-}*/
+}
 
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -87,8 +88,9 @@ app.UseAuthentication();
 
 app.UseHttpsRedirection();
 
+app.MapControllers();
+
 app.UseAuthorization();
 
-app.MapControllers();
 
 app.Run();

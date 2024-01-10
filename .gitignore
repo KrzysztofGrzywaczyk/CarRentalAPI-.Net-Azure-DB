@@ -14,3 +14,5 @@
 *.testlog
 *.manifest
 
+/.vs/ProjectEvaluation/carrentalapi.metadata.v7.bin
+/.vs/ProjectEvaluation/carrentalapi.projects.v7.bin

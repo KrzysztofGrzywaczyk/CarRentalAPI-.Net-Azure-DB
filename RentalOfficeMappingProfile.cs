@@ -23,6 +23,9 @@ namespace CarRentalAPI
                 .ForMember(r => r.Address, conf => conf.MapFrom(dto => new Address()
                 {City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street}
                 ));
+
+            CreateMap<User, PresentUserDto>()
+                .ForMember(u => u.RoleName, conf => conf.MapFrom(src => src.Role!.Name));
         }
     }
 }
