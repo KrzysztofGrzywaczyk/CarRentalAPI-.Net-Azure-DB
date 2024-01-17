@@ -11,3 +11,11 @@
 /.vs/ProjectEvaluation/carrentalapi.metadata.v6.1
 /.vs/ProjectEvaluation/carrentalapi.projects.v6.1
 /.vs/CarRentalAPI/FileContentIndex/bcaddef5-f896-4009-b49d-dfc1aace8f41.vsidx
+/.vs/ProjectEvaluation/carrentalapi.metadata.v7.bin
+/.vs/ProjectEvaluation/carrentalapi.projects.v7.bin
+/Controllers/RolesController.cs
+
+*.testlog
+*.manifest
+
+

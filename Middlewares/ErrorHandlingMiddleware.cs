@@ -1,14 +1,14 @@
-﻿using CarRentalAPI.Exceptions;
+using CarRentalAPI.Exceptions;
 using System.Runtime.InteropServices;
 
 namespace CarRentalAPI.Middlewares
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
-        public readonly ILogger<ErrorHandlingMiddleware> logger;
+        public readonly ILogger<ErrorHandlingMiddleware> _logger;
         public ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
@@ -16,14 +16,29 @@ namespace CarRentalAPI.Middlewares
             {
                 await next.Invoke(context);
             }
+            catch (BadHttpRequestException ex)
+            {
+                context.Response.StatusCode = 400;
+                await CreateErrorMessageAsync(context, ex);
+            }
+            catch (ForbidException ex)
+            {
+                context.Response.StatusCode = 403;
+                await CreateErrorMessageAsync(context, ex);
+            }
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = 404;
                 await CreateErrorMessageAsync(context, ex);
             }
+            catch (ArgumentException ex)
+            {
+                context.Response.StatusCode = 400;
+                await CreateErrorMessageAsync(context, ex);
+            }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = 500;
                 await CreateErrorMessageAsync(context, ex);
             }

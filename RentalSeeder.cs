@@ -1,20 +1,51 @@
 ﻿using CarRentalAPI.Entities;
+using CarRentalAPI.Handlers;
 
 namespace CarRentalAPI
 {
     public class RentalSeeder
     {
         private readonly RentalDbContext _dbContext;
-        public RentalSeeder(RentalDbContext dbContext)
+
+        private readonly ILogger<RentalSeeder> _logger;
+        public RentalSeeder(RentalDbContext dbContext, ILogger<RentalSeeder> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
-        public void Seed()
+
+        public void SeedBasicRoles()
+        {
+            if (_dbContext.Database.CanConnect())
+            {
+                if (!_dbContext.roles.Any())
+                {
+                    _logger.LogInformation("Seeder seed the basic roles in the database ...");
+
+                    var roles = new List<Role>()
+                    {
+                        new Role() {Name = "administrator"},
+                        new Role() {Name = "manager" },
+                        new Role() {Name = "employee"},
+                        new Role() {Name = "user"}
+                    };
+
+                    _dbContext.roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+
+                    _logger.LogInformation("Basic roles successfully CREATED");
+                }
+            }
+        }
+
+        public void SeedSampleCars()
         {
             if (_dbContext.Database.CanConnect())
             {
                 if (!_dbContext.rentalOffices.Any())
                 {
+                    _logger.LogInformation("Seeder seed the few sample records in the database ...");
+
                     var rentals = GetRentalOffices();
                     _dbContext.rentalOffices.AddRange(rentals);
                     _dbContext.SaveChanges();
@@ -28,9 +59,9 @@ namespace CarRentalAPI
             {
                 new RentalOffice()
                 {
-                    Name = "Example One Car Rental",
+                    Name = "Example Car Rental",
                     Description = "It is short description of what kind of Car Rental Office is it",
-                    Category = "Luxury cars",
+                    Category = RentalOffice.RentalCategory.Luxury,
                     AcceptUnder23 = false,
                     ConntactEmail = "luxury@example.com",
                     ConntactNumber = "0123456789",
@@ -38,7 +69,7 @@ namespace CarRentalAPI
                     {
                         City = "Wroclaw",
                         Street = "Example Street 10",
-                        PostalCode = "50-419"
+                        PostalCode = "50-420"
                     },
                     Cars = new List<Car>()
                     {
@@ -62,6 +93,8 @@ namespace CarRentalAPI
                     },
                 }
             };
+
+            _logger.LogInformation("Sample records successfully created in database");
 
             return rentals;
         }

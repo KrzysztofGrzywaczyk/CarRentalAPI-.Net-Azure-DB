@@ -1,4 +1,4 @@
-﻿using static CarRentalAPI.Handlers.LogHandler;
+using static CarRentalAPI.Handlers.LogHandler;
 
 namespace CarRentalAPI.Handlers
 {
@@ -16,9 +16,11 @@ namespace CarRentalAPI.Handlers
             GET,
             POST,
             PUT,
-            DELETE,
+            DELETE
         }
         public void LogNewRequest(string objectType, RequestEnum requestType);
-        public void LogAction(ActionEnum actionType, int entityId);
+        public void LogAction(ActionEnum actionType, int rentalId);
+
+        public void LogAction(ActionEnum actionType, int rentalId, int carId);
     }
 }
