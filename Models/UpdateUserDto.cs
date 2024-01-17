@@ -1,6 +1,6 @@
 ﻿namespace CarRentalAPI.Models
 {
-    public class UserUpdateDto
+    public class UpdateUserDto
     {
         public string? Email { get; set; }
 

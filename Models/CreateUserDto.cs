@@ -2,7 +2,7 @@
 
 namespace CarRentalAPI.Models
 {
-    public class AddUserDto
+    public class CreateUserDto
     {
         public string? Email { get; set; }
 

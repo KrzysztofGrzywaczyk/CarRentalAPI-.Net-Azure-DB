@@ -7,7 +7,7 @@ namespace CarRentalAPI.Controllers;
 
 [ApiController]
 [Route("api/rentals/{rentalId}/cars")]
-[Authorize(Roles = "admin,manager,employee")]
+[Authorize(Roles = "administrator,rentalOwner,employee")]
 public class CarsController : ControllerBase
 {
     public readonly ICarService _carService;

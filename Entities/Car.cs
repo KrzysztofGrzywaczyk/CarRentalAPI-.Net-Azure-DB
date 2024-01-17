@@ -20,6 +20,10 @@ namespace CarRentalAPI.Entities
         public FuelType Fuel { get; set; }
         public char Segment { get; set; }
         public int RentalOfficeId { get; set; }
+        public int? CreatedById { get; set; }
+        public int? ManagedById { get; set; }
+        public virtual User? CreatedBy { get; set; }
+        public virtual User? Manager { get; set; }
         public virtual RentalOffice? RentalOffice { get; set; }
 
     }

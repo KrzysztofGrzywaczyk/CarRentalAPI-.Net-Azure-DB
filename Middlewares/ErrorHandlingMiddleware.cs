@@ -21,9 +21,19 @@ namespace CarRentalAPI.Middlewares
                 context.Response.StatusCode = 400;
                 await CreateErrorMessageAsync(context, ex);
             }
+            catch (ForbidException ex)
+            {
+                context.Response.StatusCode = 403;
+                await CreateErrorMessageAsync(context, ex);
+            }
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = 404;
+                await CreateErrorMessageAsync(context, ex);
+            }
+            catch (ArgumentException ex)
+            {
+                context.Response.StatusCode = 400;
                 await CreateErrorMessageAsync(context, ex);
             }
             catch (Exception ex)

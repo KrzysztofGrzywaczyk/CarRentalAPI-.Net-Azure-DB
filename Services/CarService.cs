@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using CarRentalAPI.Authorization;
 using CarRentalAPI.Entities;
 using CarRentalAPI.Exceptions;
 using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static CarRentalAPI.Entities.Car;
@@ -11,26 +13,36 @@ namespace CarRentalAPI.Services;
 
 public class CarService : ICarService
 {
-    private const string entityType = "Car";
+    private const string entityName = "Car";
+    private readonly IAuthorizationService _authorizationService;
+    private readonly IUserContextService _userContextService;
     private readonly RentalDbContext _dbContext;
     private readonly ILogHandler _logHandler;
     private readonly IMapper _mapper;
 
-    public CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapper mapper)
+    public CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapper mapper,
+        IAuthorizationService authorizationService, IUserContextService userContextService)
     {
+        _authorizationService = authorizationService;
         _dbContext = dbContext;
         _logHandler = logHandler;
         _mapper = mapper;
+        _userContextService = userContextService;
     }
 
     public string CreateCar(int rentalId, CreateCarDto dto)
     {
-        _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.POST);
+        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
 
-        var rentalOffice = LoadRentalOfficeIfExist(rentalId); 
+        var rentalOffice = LoadRentalOfficeIfExist(rentalId);
+        var createdByUser = _userContextService.GetUserId;
+        var managedByUserId = rentalOffice.OwnerId;
 
         var carEntity = _mapper.Map<Car>(dto);
         carEntity.RentalOfficeId = rentalOffice.Id;
+        carEntity.CreatedById = createdByUser;
+        carEntity.ManagedById = managedByUserId;
+
 
         _dbContext.cars.Add(carEntity);
         _dbContext.SaveChanges();
@@ -47,6 +59,13 @@ public class CarService : ICarService
         
         var carEntity = GetCarIfExist(rentalId, carId);
 
+        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Delete));
+
+        if (!authorizationResult.Result.Succeeded)
+        {
+            throw new ForbidException();
+        }
+
         _dbContext.cars.Remove(carEntity);
         _dbContext.SaveChanges();
 
@@ -56,7 +75,7 @@ public class CarService : ICarService
 
     public IEnumerable<PresentCarAllCarsDto> GetAllCarsInBase()
     {
-        _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
+        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         var cars = _dbContext.cars
             .ToList();
@@ -68,7 +87,7 @@ public class CarService : ICarService
 
     public IEnumerable<PresentCarDto> GetAllCarsInRental(int rentalId)
     {
-        _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
+        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         var rentalOffice = LoadRentalOfficeIfExist(rentalId);
 
@@ -83,7 +102,7 @@ public class CarService : ICarService
 
     public PresentCarDto GetCarById(int rentalId, int carId) 
     {
-        _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.GET);
+        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         LoadRentalOfficeIfExist(rentalId);
 
@@ -96,11 +115,19 @@ public class CarService : ICarService
 
     public string PutCar(int rentalId, int carId, CreateCarDto dto)
     {
-        _logHandler.LogNewRequest(entityType, ILogHandler.RequestEnum.PUT);
+        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
 
         LoadRentalOfficeIfExist(rentalId);
 
         var carEntity = _dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
+
+        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Update));
+
+        if (authorizationResult.Result.Succeeded)
+        {
+            throw new ForbidException();
+        }
+
 
         carEntity!.PlateNumber = dto.PlateNumber;
         carEntity!.Brand = dto.Brand;

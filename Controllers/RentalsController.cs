@@ -4,32 +4,31 @@ using CarRentalAPI.Services;
 using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 namespace CarRentalAPI.Controllers;
 
 [Route("api/rentaloffices")]
 [ApiController]
-[Authorize(Roles = "admin,manager")]
+[Authorize(Roles = "administrator,rentalOwner")]
 public class RentalsController : ControllerBase
 {
-
     private readonly IRentalService _rentalService;
     
-
     public RentalsController(RentalDbContext dbContext, IMapper mapper, IRentalService rentalService)
     {
         _rentalService = rentalService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<RentalOfficeDto>> GetAll()
+    public ActionResult<IEnumerable<PresentRentalOfficeDto>> GetAll()
     {
         return Ok(_rentalService.GetRentalAll());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<RentalOfficeDto> Get([FromRoute] int id) 
+    public ActionResult<PresentRentalOfficeDto> Get([FromRoute] int id) 
     {
         var rentalDto = _rentalService.GetRentalById(id);
 
@@ -41,7 +40,7 @@ public class RentalsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public ActionResult<RentalOfficeDto> Get([FromBody] RentalOfficeUpdateDto dto, [FromRoute] int id)
+    public ActionResult<PresentRentalOfficeDto> Get([FromBody] UpdateRentalOfficeDto dto, [FromRoute] int id)
     {
 
         if (!ModelState.IsValid)
@@ -61,6 +60,8 @@ public class RentalsController : ControllerBase
             return BadRequest(ModelState);
         }
 
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+
         var path = _rentalService.CreateRental(dto);
 
         return Created(path, null);
@@ -70,7 +71,6 @@ public class RentalsController : ControllerBase
 
     public ActionResult Delete([FromRoute] int id)
     {
-                    
         _rentalService.DeleteRental(id);
         return NoContent();
     }

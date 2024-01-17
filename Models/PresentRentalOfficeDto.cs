@@ -1,6 +1,6 @@
 ﻿namespace CarRentalAPI.Models
 {
-    public class RentalOfficeDto
+    public class PresentRentalOfficeDto
     {
         public int Id { get; set; }
 
@@ -17,6 +17,8 @@
         public string? Street { get; set; }
 
         public string? PostalCode { get; set;}
+
+        public int OwnerId { get; set; }
 
         public List<PresentCarDto>? Cars { get; set;}
     }

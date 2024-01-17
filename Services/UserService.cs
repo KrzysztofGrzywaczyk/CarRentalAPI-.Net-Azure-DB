@@ -26,7 +26,7 @@ namespace CarRentalAPI.Services
             _authenticationSettings = authenticationSettings;
             _mapper = mapper;
         }
-        public string AddUser(AddUserDto userDto)
+        public string AddUser(CreateUserDto userDto)
         {
             var newUser = new User()
             {
@@ -113,7 +113,7 @@ namespace CarRentalAPI.Services
 
         }
 
-        public void PutUser(UserUpdateDto userDto, int userId)
+        public void PutUser(UpdateUserDto userDto, int userId)
         {
             var user = _dbContext.users.Include(u => u.Role).FirstOrDefault(u => u.Id == userId);
 

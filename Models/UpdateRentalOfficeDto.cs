@@ -3,7 +3,7 @@ using static CarRentalAPI.Entities.RentalOffice;
 
 namespace CarRentalAPI.Models
 {
-    public class RentalOfficeUpdateDto
+    public class UpdateRentalOfficeDto
     {
         [Required]
         [MaxLength(50)]

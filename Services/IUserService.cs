@@ -4,7 +4,7 @@ namespace CarRentalAPI.Services;
 
 public interface IUserService
 {
-    public string AddUser (AddUserDto userDto);
+    public string AddUser (CreateUserDto userDto);
 
     public void DeleteUser(int userId);
 
@@ -14,5 +14,5 @@ public interface IUserService
 
     public PresentUserDto GetUserById(int userId);
 
-    public void PutUser (UserUpdateDto userDto, int userId);
+    public void PutUser (UpdateUserDto userDto, int userId);
 }

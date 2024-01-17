@@ -13,9 +13,12 @@ using NLog;
 using NLog.Config;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using System.Reflection;
+using CarRentalAPI.Authorization;
+using CarRentalAPI.Authorizationl;
 
 LogManager.Configuration = new XmlLoggingConfiguration("nlog.config");
-
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder()
@@ -47,11 +50,34 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
-builder.Services.AddControllers(); 
+builder.Services.AddControllers();
+builder.Services.AddScoped<IAuthorizationHandler, RentalResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CarResourceOperationRequirementHandler>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "CarRentalAPI", Version = "v1" });
+    var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "JWT Authorization header using the Bearer scheme",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+        {
+            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+    c.AddSecurityDefinition("Bearer", securityScheme);
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        { securityScheme, new List<string>() }
+    });
+});
 builder.Services.AddTransient<ICarService, CarService>();
 builder.Services.AddTransient<ILogHandler, LogHandler>();
 builder.Services.AddTransient<IRentalService, RentalService>();
@@ -59,20 +85,16 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddSingleton(config.Get<RentalDbContextConfiguration>() ?? throw new ArgumentNullException(nameof(config), "Configuration is required to retrieve RentalDbContextConfig"));
 builder.Services.AddDbContext<RentalDbContext>();
 builder.Services.AddScoped<RentalSeeder>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-builder.Services.AddScoped<IValidator<AddUserDto>, AddUserValidator>();
-builder.Services.AddScoped<IValidator<UserUpdateDto>, UserUpdateValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();
+builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -80,17 +102,21 @@ using (var scope = app.Services.CreateScope())
     seeder.SeedBasicRoles();
 }
 
-
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestTimeMiddleware>();
 
 app.UseAuthentication();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
 
 app.UseAuthorization();
-
 
 app.Run();

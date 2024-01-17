@@ -7,7 +7,7 @@ namespace CarRentalAPI.Controllers;
 
 [Route("api/users")]
 [ApiController]
-//[Authorize(Roles = "admin")]
+[Authorize(Roles = "administrator")]
 public class UserManagmentController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -18,7 +18,7 @@ public class UserManagmentController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateUser([FromBody] AddUserDto userDto)
+    public ActionResult CreateUser([FromBody] CreateUserDto userDto)
     {
         var path = _userService.AddUser(userDto);
 
@@ -47,7 +47,7 @@ public class UserManagmentController : ControllerBase
     }
 
     [HttpPut("{userId}")]
-    public ActionResult PutUser([FromBody] UserUpdateDto userDto, [FromRoute] int userId)
+    public ActionResult PutUser([FromBody] UpdateUserDto userDto, [FromRoute] int userId)
     {
         _userService.PutUser(userDto, userId);
         return Ok();

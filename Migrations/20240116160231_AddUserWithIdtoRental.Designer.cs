@@ -4,6 +4,7 @@ using CarRentalAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalAPI.Migrations
 {
     [DbContext(typeof(RentalDbContext))]
-    partial class RentalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240116160231_AddUserWithIdtoRental")]
+    partial class AddUserWithIdtoRental
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,16 +62,7 @@ namespace CarRentalAPI.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
                     b.Property<int>("Fuel")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ManagedById")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
@@ -89,10 +83,6 @@ namespace CarRentalAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ManagerId");
 
                     b.HasIndex("RentalOfficeId");
 
@@ -200,23 +190,11 @@ namespace CarRentalAPI.Migrations
 
             modelBuilder.Entity("CarRentalAPI.Entities.Car", b =>
                 {
-                    b.HasOne("CarRentalAPI.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("CarRentalAPI.Entities.User", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
-
                     b.HasOne("CarRentalAPI.Entities.RentalOffice", "RentalOffice")
                         .WithMany("Cars")
                         .HasForeignKey("RentalOfficeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Manager");
 
                     b.Navigation("RentalOffice");
                 });

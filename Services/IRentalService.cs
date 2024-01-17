@@ -1,4 +1,5 @@
 ﻿using CarRentalAPI.Models;
+using System.Security.Claims;
 
 namespace CarRentalAPI.Services;
 
@@ -8,9 +9,9 @@ public interface IRentalService
 
     public void DeleteRental(int id);
     
-    public IEnumerable<RentalOfficeDto> GetRentalAll();
+    public IEnumerable<PresentRentalOfficeDto> GetRentalAll();
     
-    public RentalOfficeDto GetRentalById(int id);
+    public PresentRentalOfficeDto GetRentalById(int id);
     
-    public void PutRentalById(RentalOfficeUpdateDto dto, int id);
+    public void PutRentalById(UpdateRentalOfficeDto dto, int id);
 }

@@ -18,7 +18,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public ActionResult RegisterUser([FromBody]AddUserDto userDto)
+    public ActionResult RegisterUser([FromBody]CreateUserDto userDto)
     {
         _userService.AddUser(userDto);
         return Ok();
