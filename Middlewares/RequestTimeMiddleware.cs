@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace CarRentalAPI.Middlewares
 {
@@ -32,3 +32,4 @@ namespace CarRentalAPI.Middlewares
         }
     }
 }
+

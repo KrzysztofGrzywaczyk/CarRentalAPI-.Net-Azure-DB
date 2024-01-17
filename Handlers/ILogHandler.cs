@@ -1,4 +1,4 @@
-﻿using static CarRentalAPI.Handlers.LogHandler;
+using static CarRentalAPI.Handlers.LogHandler;
 
 namespace CarRentalAPI.Handlers
 {

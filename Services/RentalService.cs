@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CarRentalAPI.Authorization;
 using CarRentalAPI.Entities;
 using CarRentalAPI.Exceptions;

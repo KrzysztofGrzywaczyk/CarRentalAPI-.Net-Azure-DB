@@ -1,4 +1,4 @@
-﻿using CarRentalAPI.Exceptions;
+using CarRentalAPI.Exceptions;
 using System.Runtime.InteropServices;
 
 namespace CarRentalAPI.Middlewares

@@ -1,4 +1,4 @@
-﻿namespace CarRentalAPI.Entities
+namespace CarRentalAPI.Entities
 {
     public class Address
     {

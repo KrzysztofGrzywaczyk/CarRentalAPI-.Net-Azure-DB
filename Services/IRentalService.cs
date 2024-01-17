@@ -1,4 +1,4 @@
-﻿using CarRentalAPI.Models;
+using CarRentalAPI.Models;
 using System.Security.Claims;
 
 namespace CarRentalAPI.Services;

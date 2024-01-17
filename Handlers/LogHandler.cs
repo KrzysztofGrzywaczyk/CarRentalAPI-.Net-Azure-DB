@@ -1,4 +1,4 @@
-﻿using CarRentalAPI.Entities;
+using CarRentalAPI.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace CarRentalAPI.Handlers

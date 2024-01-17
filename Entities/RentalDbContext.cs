@@ -1,4 +1,4 @@
-﻿using CarRentalAPI.Configuration;
+using CarRentalAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalAPI.Entities

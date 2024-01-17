@@ -1,4 +1,4 @@
-﻿using CarRentalAPI.Models;
+using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalAPI.Services;
