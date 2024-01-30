@@ -4,10 +4,14 @@ using CarRentalAPI.Entities;
 using CarRentalAPI.Exceptions;
 using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
+using CarRentalAPI.Models.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using static CarRentalAPI.Entities.Car;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CarRentalAPI.Services;
 
@@ -73,31 +77,86 @@ public class CarService : ICarService
 
     }
 
-    public IEnumerable<PresentCarAllCarsDto> GetAllCarsInBase()
+    public PagedResult<PresentCarAllCarsDto> GetAllCarsInBase(CarQuery query)
     {
         _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
-        var cars = _dbContext.cars
+        var fullQuery = _dbContext
+            .cars
+            .Where(c => query.SearchPhrase == null ||
+            (c.Brand!.ToLower().Contains(query.SearchPhrase.ToLower()) || c.Model!.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+        var count = fullQuery.Count();
+
+        if (!string.IsNullOrEmpty(query.SortBy))
+        {
+            var selector = new Dictionary<string, Expression<Func<Car, object>>>
+            {
+                { nameof(Car.Brand), c => c.Brand! },
+                { nameof(Car.Model), c => c.Model! },
+                { nameof(Car.Year), c => c.Year },
+                { nameof(Car.Fuel), c => c.Fuel },
+                { nameof(Car.Segment), c => c.Segment },
+                { nameof(Car.RentalOfficeId), c => c.RentalOfficeId }
+            };
+
+            var selectedColumn = selector[query.SortBy];
+
+            fullQuery = query.SortDirection == SortDirection.Ascending ? fullQuery.OrderBy(selectedColumn) : fullQuery.OrderByDescending(selectedColumn);
+        }
+
+        var pagedQuery = fullQuery
+            .Skip(query.PageSize*(query.PageNumber -1))
+            .Take(query.PageSize)
             .ToList();
 
-        var carDtos = _mapper.Map<List<PresentCarAllCarsDto>>(cars);
+        var carDtos = _mapper.Map<List<PresentCarAllCarsDto>>(pagedQuery);
 
-        return carDtos;
+        var pagedResult = new PagedResult<PresentCarAllCarsDto>(carDtos, count, query.PageSize, query.PageNumber);
+
+        return pagedResult;
     }
 
-    public IEnumerable<PresentCarDto> GetAllCarsInRental(int rentalId)
+    public PagedResult<PresentCarDto> GetAllCarsInRental(int rentalId, CarQuery query)
     {
         _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         var rentalOffice = LoadRentalOfficeIfExist(rentalId);
 
-        var cars = _dbContext.cars
+        var fullQuery = _dbContext.cars
             .Where(c => c.RentalOfficeId == rentalId)
-            .ToList();
+            .Where(c => query.SearchPhrase == null ||
+            (c.Brand!.ToLower().Contains(query.SearchPhrase.ToLower()) || c.Model!.ToLower().Contains(query.SearchPhrase.ToLower())));
 
-        var carDtos = _mapper.Map<List<PresentCarDto>>(cars);
+        var count = fullQuery.Count();
 
-        return carDtos;
+        if (!string.IsNullOrEmpty(query.SortBy))
+        {
+            var selector = new Dictionary<string, Expression<Func<Car, object>>>
+            {
+                { nameof(Car.Brand), c => c.Brand! },
+                { nameof(Car.Model), c => c.Model! },
+                { nameof(Car.Year), c => c.Year },
+                { nameof(Car.Fuel), c => c.Fuel },
+                { nameof(Car.Segment), c => c.Segment },
+                { nameof(Car.RentalOfficeId), c => c.RentalOfficeId }
+            };
+
+            var selectedColumn = selector[query.SortBy];
+
+            fullQuery = query.SortDirection == SortDirection.Ascending ? fullQuery.OrderBy(selectedColumn) : fullQuery.OrderByDescending(selectedColumn);
+        }
+
+        var pagedQuery = fullQuery
+           .Skip(query.PageSize * (query.PageNumber - 1))
+           .Take(query.PageSize)
+           .ToList();
+
+        var carDtos = _mapper.Map<List<PresentCarDto>>(pagedQuery);
+
+        var pagedResult = new PagedResult<PresentCarDto>(carDtos, count, query.PageSize, query.PageNumber);
+
+        return pagedResult;
     }
 
     public PresentCarDto GetCarById(int rentalId, int carId) 
@@ -133,7 +192,7 @@ public class CarService : ICarService
         carEntity!.Brand = dto.Brand;
         carEntity!.Model = dto.Model;
         carEntity!.Year = dto.Year;
-        carEntity!.Fuel = (FuelType)Enum.Parse(typeof(FuelType), dto.Fuel, true);
+        carEntity!.Fuel = (FuelType)Enum.Parse(typeof(FuelType), dto.Fuel!, true);
         carEntity!.Segment = dto.Segment;
 
         _dbContext.SaveChanges();

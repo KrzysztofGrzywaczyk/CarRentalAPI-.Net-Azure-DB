@@ -1,4 +1,5 @@
 ﻿using CarRentalAPI.Models;
+using CarRentalAPI.Models.Queries;
 using CarRentalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ public class CarsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult GetAllCarsInRental([FromRoute] int rentalId)
+    public ActionResult GetAllCarsInRental([FromRoute] int rentalId, [FromQuery] CarQuery query)
     {
-        return Ok( _carService.GetAllCarsInRental(rentalId));
+        return Ok( _carService.GetAllCarsInRental(rentalId, query));
     }
 
     [HttpGet("{carId}")]

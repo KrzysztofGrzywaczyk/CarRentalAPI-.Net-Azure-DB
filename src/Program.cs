@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Reflection;
 using CarRentalAPI.Authorization;
 using CarRentalAPI.Authorizationl;
+using CarRentalAPI.Models.Queries;
+using CarRentalAPI.Models.Pagination;
 
 LogManager.Configuration = new XmlLoggingConfiguration("nlog.config");
 
@@ -90,6 +92,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
+builder.Services.AddScoped<IValidator<CarQuery>,  CarQueryValidator>();
+builder.Services.AddScoped<IValidator<RentalQuery>, RentalQueryValidator>();
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();

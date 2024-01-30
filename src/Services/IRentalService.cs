@@ -1,4 +1,5 @@
 using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
 using System.Security.Claims;
 
 namespace CarRentalAPI.Services;
@@ -9,7 +10,7 @@ public interface IRentalService
 
     public void DeleteRental(int id);
     
-    public IEnumerable<PresentRentalOfficeDto> GetRentalAll();
+    public PagedResult<PresentRentalOfficeDto> GetRentalAll(RentalQuery query);
     
     public PresentRentalOfficeDto GetRentalById(int id);
     

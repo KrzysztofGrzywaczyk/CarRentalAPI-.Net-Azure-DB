@@ -169,3 +169,4 @@ C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\src\obj\Debug\net7.0\scopedcss\bundle\
 C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\src\obj\Debug\net7.0\CarRentalAPI.csproj.CopyComplete
 C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\src\obj\Debug\net7.0\CarRentalAPI.genruntimeconfig.cache
 C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\src\obj\Debug\net7.0\ref\CarRentalAPI.dll
+C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\src\bin\Debug\net7.0\nlog.config

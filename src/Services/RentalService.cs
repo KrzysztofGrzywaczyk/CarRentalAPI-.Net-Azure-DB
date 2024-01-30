@@ -4,8 +4,11 @@ using CarRentalAPI.Entities;
 using CarRentalAPI.Exceptions;
 using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
+using CarRentalAPI.Models.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using static CarRentalAPI.Entities.RentalOffice;
 
@@ -69,17 +72,44 @@ public class RentalService : IRentalService
         _logHandler.LogAction(ILogHandler.ActionEnum.Deleted, rentalOffice!.Id);
     }
 
-    public IEnumerable<PresentRentalOfficeDto> GetRentalAll()
+    public PagedResult<PresentRentalOfficeDto> GetRentalAll(RentalQuery query)
     {
         _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
-        var rentals = _dbContext.rentalOffices
+
+        var fullQuery = _dbContext.
+            rentalOffices
             .Include(r => r.Address)
             .Include(r => r.Cars)
+            .Where(r => query.SearchPhrase == null ||
+            (r.Name!.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description!.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+        var count = fullQuery.Count();
+
+        if (!string.IsNullOrEmpty(query.SortBy))
+        {
+            var selector = new Dictionary<string, Expression<Func<RentalOffice, object>>>
+            {
+                { nameof(RentalOffice.Name), r => r.Name! },
+                { nameof(RentalOffice.Category), r => r.Category! },
+                { nameof(RentalOffice.AcceptUnder23), r => r.AcceptUnder23 },
+                { nameof(RentalOffice.AddressID), r => r.AddressID }
+            };
+
+            var selectedColumn = selector[query.SortBy];
+
+            fullQuery = query.SortDirection == SortDirection.Ascending ? fullQuery.OrderBy(selectedColumn) : fullQuery.OrderByDescending(selectedColumn);
+        }
+
+        var pagedQuery = fullQuery
+            .Skip(query.PageSize * (query.PageNumber - 1))
+            .Take(query.PageSize)
             .ToList();
 
-        var rentalDtos = _mapper.Map<List<PresentRentalOfficeDto>>(rentals);
+        var rentalDtos = _mapper.Map<List<PresentRentalOfficeDto>>(pagedQuery);
 
-        return rentalDtos;
+        var pagedResult = new PagedResult<PresentRentalOfficeDto>(rentalDtos, count, query.PageSize, query.PageNumber);
+
+        return pagedResult;
     }
 
     public PresentRentalOfficeDto GetRentalById(int id)

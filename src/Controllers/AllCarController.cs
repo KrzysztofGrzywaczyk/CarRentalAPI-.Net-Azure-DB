@@ -1,4 +1,5 @@
-﻿using CarRentalAPI.Services;
+﻿using CarRentalAPI.Models.Queries;
+using CarRentalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +17,8 @@ public class AllCarController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult GetAllCarsInBase()
+    public ActionResult GetAllCarsInBase([FromQuery] CarQuery query)
     {
-        return Ok(_carService.GetAllCarsInBase());
+        return Ok(_carService.GetAllCarsInBase(query));
     }
 }

@@ -5,6 +5,7 @@ using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using CarRentalAPI.Models.Pagination;
 
 
 namespace CarRentalAPI.Controllers;
@@ -22,9 +23,9 @@ public class RentalsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<PresentRentalOfficeDto>> GetAll()
+    public ActionResult<IEnumerable<PresentRentalOfficeDto>> GetAll([FromQuery] RentalQuery query)
     {
-        return Ok(_rentalService.GetRentalAll());
+        return Ok(_rentalService.GetRentalAll(query));
     }
 
     [HttpGet("{id}")]

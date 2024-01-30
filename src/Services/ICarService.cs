@@ -1,4 +1,6 @@
 using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
+using CarRentalAPI.Models.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalAPI.Services;
@@ -9,9 +11,9 @@ public interface ICarService
 
     public void DeleteCar(int rentalID, int carId);
 
-    public IEnumerable<PresentCarAllCarsDto> GetAllCarsInBase();
+    public PagedResult<PresentCarAllCarsDto> GetAllCarsInBase(CarQuery query);
 
-    public IEnumerable<PresentCarDto> GetAllCarsInRental(int rentalId);
+    public PagedResult<PresentCarDto> GetAllCarsInRental(int rentalId, CarQuery query);
 
     public PresentCarDto GetCarById(int rentalId, int carId);
 
