@@ -7,51 +7,34 @@ using CarRentalAPI.Models;
 using CarRentalAPI.Models.Pagination;
 using CarRentalAPI.Models.Queries;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using static CarRentalAPI.Entities.Car;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CarRentalAPI.Services;
 
-public class CarService : ICarService
+public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapper mapper,
+        IAuthorizationService authorizationService, IUserContextService userContextService) : ICarService
 {
     private const string entityName = "Car";
-    private readonly IAuthorizationService _authorizationService;
-    private readonly IUserContextService _userContextService;
-    private readonly RentalDbContext _dbContext;
-    private readonly ILogHandler _logHandler;
-    private readonly IMapper _mapper;
-
-    public CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapper mapper,
-        IAuthorizationService authorizationService, IUserContextService userContextService)
-    {
-        _authorizationService = authorizationService;
-        _dbContext = dbContext;
-        _logHandler = logHandler;
-        _mapper = mapper;
-        _userContextService = userContextService;
-    }
 
     public string CreateCar(int rentalId, CreateCarDto dto)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
 
         var rentalOffice = LoadRentalOfficeIfExist(rentalId);
-        var createdByUser = _userContextService.GetUserId;
+        var createdByUser = userContextService.GetUserId;
         var managedByUserId = rentalOffice.OwnerId;
 
-        var carEntity = _mapper.Map<Car>(dto);
+        var carEntity = mapper.Map<Car>(dto);
         carEntity.RentalOfficeId = rentalOffice.Id;
         carEntity.CreatedById = createdByUser;
         carEntity.ManagedById = managedByUserId;
 
 
-        _dbContext.cars.Add(carEntity);
-        _dbContext.SaveChanges();
+        dbContext.cars.Add(carEntity);
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Created, carEntity.Id);
+        logHandler.LogAction(ILogHandler.ActionEnum.Created, carEntity.Id);
 
         var path = $"/api/{rentalId}/cars/{carEntity.Id}";
         return path;
@@ -63,25 +46,25 @@ public class CarService : ICarService
         
         var carEntity = GetCarIfExist(rentalId, carId);
 
-        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Delete));
+        var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Delete));
 
         if (!authorizationResult.Result.Succeeded)
         {
             throw new ForbidException();
         }
 
-        _dbContext.cars.Remove(carEntity);
-        _dbContext.SaveChanges();
+        dbContext.cars.Remove(carEntity);
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Deleted, carEntity.Id);
+        logHandler.LogAction(ILogHandler.ActionEnum.Deleted, carEntity.Id);
 
     }
 
     public PagedResult<PresentCarAllCarsDto> GetAllCarsInBase(CarQuery query)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
-        var fullQuery = _dbContext
+        var fullQuery = dbContext
             .cars
             .Where(c => query.SearchPhrase == null ||
             (c.Brand!.ToLower().Contains(query.SearchPhrase.ToLower()) || c.Model!.ToLower().Contains(query.SearchPhrase.ToLower())));
@@ -110,7 +93,7 @@ public class CarService : ICarService
             .Take(query.PageSize)
             .ToList();
 
-        var carDtos = _mapper.Map<List<PresentCarAllCarsDto>>(pagedQuery);
+        var carDtos = mapper.Map<List<PresentCarAllCarsDto>>(pagedQuery);
 
         var pagedResult = new PagedResult<PresentCarAllCarsDto>(carDtos, count, query.PageSize, query.PageNumber);
 
@@ -119,11 +102,11 @@ public class CarService : ICarService
 
     public PagedResult<PresentCarDto> GetAllCarsInRental(int rentalId, CarQuery query)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         var rentalOffice = LoadRentalOfficeIfExist(rentalId);
 
-        var fullQuery = _dbContext.cars
+        var fullQuery = dbContext.cars
             .Where(c => c.RentalOfficeId == rentalId)
             .Where(c => query.SearchPhrase == null ||
             (c.Brand!.ToLower().Contains(query.SearchPhrase.ToLower()) || c.Model!.ToLower().Contains(query.SearchPhrase.ToLower())));
@@ -152,7 +135,7 @@ public class CarService : ICarService
            .Take(query.PageSize)
            .ToList();
 
-        var carDtos = _mapper.Map<List<PresentCarDto>>(pagedQuery);
+        var carDtos = mapper.Map<List<PresentCarDto>>(pagedQuery);
 
         var pagedResult = new PagedResult<PresentCarDto>(carDtos, count, query.PageSize, query.PageNumber);
 
@@ -161,26 +144,26 @@ public class CarService : ICarService
 
     public PresentCarDto GetCarById(int rentalId, int carId) 
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
         LoadRentalOfficeIfExist(rentalId);
 
         var carEntity = GetCarIfExist(rentalId, carId);
 
-        var carDto = _mapper.Map<PresentCarDto>(carEntity);
+        var carDto = mapper.Map<PresentCarDto>(carEntity);
 
         return carDto;
     }
 
     public string PutCar(int rentalId, int carId, CreateCarDto dto)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
 
         LoadRentalOfficeIfExist(rentalId);
 
-        var carEntity = _dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
+        var carEntity = dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
 
-        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Update));
+        var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Update));
 
         if (authorizationResult.Result.Succeeded)
         {
@@ -195,9 +178,9 @@ public class CarService : ICarService
         carEntity!.Fuel = (FuelType)Enum.Parse(typeof(FuelType), dto.Fuel!, true);
         carEntity!.Segment = dto.Segment;
 
-        _dbContext.SaveChanges();
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Updated, rentalId, carId);
+        logHandler.LogAction(ILogHandler.ActionEnum.Updated, rentalId, carId);
 
         var path = $"/api/{rentalId}/cars/{carEntity.Id}";
 
@@ -206,7 +189,7 @@ public class CarService : ICarService
 
     private RentalOffice LoadRentalOfficeIfExist(int rentalId)
     {
-        var renatlOffice = _dbContext.rentalOffices.FirstOrDefault(r => r.Id == rentalId);
+        var renatlOffice = dbContext.rentalOffices.FirstOrDefault(r => r.Id == rentalId);
         if (renatlOffice is null)
         {
             throw new NotFoundException("Not found rental office with given id.");
@@ -216,7 +199,7 @@ public class CarService : ICarService
 
     private Car GetCarIfExist(int rentalId, int carId)
     {
-        var carEntity = _dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
+        var carEntity = dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
         if (carEntity is null)
         {
             throw new NotFoundException("Not found car with given Id in given rental.");

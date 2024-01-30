@@ -1,9 +1,8 @@
-﻿namespace CarRentalAPI.Entities
-{
-    public class Role
-    {
-        public int Id { get; set; }
+﻿namespace CarRentalAPI.Entities;
 
-        public string? Name { get; set; }
-    }
+public class Role
+{
+    public int Id { get; set; }
+
+    public string? Name { get; set; }
 }

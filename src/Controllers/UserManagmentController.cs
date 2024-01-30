@@ -8,19 +8,12 @@ namespace CarRentalAPI.Controllers;
 [Route("api/users")]
 [ApiController]
 [Authorize(Roles = "administrator")]
-public class UserManagmentController : ControllerBase
+public class UserManagmentController(IUserService userService) : ControllerBase
 {
-    private readonly IUserService _userService;
-
-    public UserManagmentController( IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpPost]
     public ActionResult CreateUser([FromBody] CreateUserDto userDto)
     {
-        var path = _userService.AddUser(userDto);
+        var path = userService.AddUser(userDto);
 
         return Ok(path);
 
@@ -29,7 +22,7 @@ public class UserManagmentController : ControllerBase
     [HttpDelete("{userId}")]
     public ActionResult DeleteUser(int userId)
     {
-        _userService.DeleteUser(userId);
+        userService.DeleteUser(userId);
 
         return NoContent();
     }
@@ -37,19 +30,19 @@ public class UserManagmentController : ControllerBase
     [HttpGet("all")]
     public ActionResult GetAllUsers()
     {
-        return Ok(_userService.GetAllUsers());
+        return Ok(userService.GetAllUsers());
     }
 
     [HttpGet("{userId}")]
     public ActionResult GetUserById([FromRoute] int userId)
     {
-        return Ok(_userService.GetUserById(userId));
+        return Ok(userService.GetUserById(userId));
     }
 
     [HttpPut("{userId}")]
     public ActionResult PutUser([FromBody] UpdateUserDto userDto, [FromRoute] int userId)
     {
-        _userService.PutUser(userDto, userId);
+        userService.PutUser(userDto, userId);
         return Ok();
     }
 }

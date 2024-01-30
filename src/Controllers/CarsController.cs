@@ -9,37 +9,32 @@ namespace CarRentalAPI.Controllers;
 [ApiController]
 [Route("api/rentals/{rentalId}/cars")]
 [Authorize(Roles = "administrator,rentalOwner,employee")]
-public class CarsController : ControllerBase
+public class CarsController(ICarService carService) : ControllerBase
 {
-    public readonly ICarService _carService;
-    public CarsController(ICarService carService)
-    {
-        _carService = carService;
-    }
 
     [HttpGet]
     public ActionResult GetAllCarsInRental([FromRoute] int rentalId, [FromQuery] CarQuery query)
     {
-        return Ok( _carService.GetAllCarsInRental(rentalId, query));
+        return Ok( carService.GetAllCarsInRental(rentalId, query));
     }
 
     [HttpGet("{carId}")]
     public ActionResult GetCar([FromRoute] int rentalId, [FromRoute] int carId)
     {
-        return Ok(_carService.GetCarById(rentalId, carId));
+        return Ok(carService.GetCarById(rentalId, carId));
     }
 
     [HttpPost]
     public ActionResult CreateCar([FromRoute] int rentalId, [FromBody] CreateCarDto dto)
     {
-        var path = _carService.CreateCar(rentalId, dto);
+        var path = carService.CreateCar(rentalId, dto);
         return Created(path, null);
     }
 
     [HttpDelete("{carId}")]
     public ActionResult DeleteCar([FromRoute] int rentalId, [FromRoute] int carId)
     {
-        _carService.DeleteCar(rentalId, carId);
+        carService.DeleteCar(rentalId, carId);
         return NoContent();
     }
 
@@ -51,7 +46,7 @@ public class CarsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var path = _carService.PutCar(rentalId, carId, dto);
+        var path = carService.PutCar(rentalId, carId, dto);
 
         return Ok(path);
     }  

@@ -1,6 +1,5 @@
 using CarRentalAPI.Models;
 using CarRentalAPI.Models.Pagination;
-using System.Security.Claims;
 
 namespace CarRentalAPI.Services;
 

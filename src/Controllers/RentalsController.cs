@@ -13,25 +13,18 @@ namespace CarRentalAPI.Controllers;
 [Route("api/rentaloffices")]
 [ApiController]
 [Authorize(Roles = "administrator,rentalOwner")]
-public class RentalsController : ControllerBase
+public class RentalsController(IRentalService rentalService) : ControllerBase
 {
-    private readonly IRentalService _rentalService;
-    
-    public RentalsController(RentalDbContext dbContext, IMapper mapper, IRentalService rentalService)
-    {
-        _rentalService = rentalService;
-    }
-
     [HttpGet]
     public ActionResult<IEnumerable<PresentRentalOfficeDto>> GetAll([FromQuery] RentalQuery query)
     {
-        return Ok(_rentalService.GetRentalAll(query));
+        return Ok(rentalService.GetRentalAll(query));
     }
 
     [HttpGet("{id}")]
     public ActionResult<PresentRentalOfficeDto> Get([FromRoute] int id) 
     {
-        var rentalDto = _rentalService.GetRentalById(id);
+        var rentalDto = rentalService.GetRentalById(id);
 
         if (rentalDto != null)
         {
@@ -49,7 +42,7 @@ public class RentalsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        _rentalService.PutRentalById(dto, id);
+        rentalService.PutRentalById(dto, id);
         return Ok();
     }
 
@@ -63,7 +56,7 @@ public class RentalsController : ControllerBase
 
         var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
 
-        var path = _rentalService.CreateRental(dto);
+        var path = rentalService.CreateRental(dto);
 
         return Created(path, null);
     }
@@ -72,7 +65,7 @@ public class RentalsController : ControllerBase
 
     public ActionResult Delete([FromRoute] int id)
     {
-        _rentalService.DeleteRental(id);
+        rentalService.DeleteRental(id);
         return NoContent();
     }
 }

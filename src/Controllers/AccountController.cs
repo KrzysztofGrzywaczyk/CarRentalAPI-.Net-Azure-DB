@@ -8,26 +8,19 @@ namespace CarRentalAPI.Controllers;
 [Route("api/account")]
 [ApiController]
 [AllowAnonymous]
-public class AccountController : ControllerBase
+public class AccountController(IUserService userService) : ControllerBase
 {
-    private readonly IUserService _userService;
-
-    public AccountController(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpPost("register")]
     public ActionResult RegisterUser([FromBody]CreateUserDto userDto)
     {
-        _userService.AddUser(userDto);
+        userService.AddUser(userDto);
         return Ok();
     }
 
     [HttpPost("login")]
     public ActionResult Login([FromBody] LoginDto loginDto)
     {
-        string token = _userService.GenerateToken(loginDto);
+        string token = userService.GenerateToken(loginDto);
         return Ok(token);
     }
 }

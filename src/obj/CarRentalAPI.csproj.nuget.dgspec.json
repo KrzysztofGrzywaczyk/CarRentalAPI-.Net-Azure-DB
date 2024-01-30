@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj": {}
+    "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj": {
+    "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj",
         "projectName": "CarRentalAPI",
-        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj",
+        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj",
         "packagesPath": "C:\\Users\\grzywaczykk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\obj\\",
+        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -22,15 +22,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -41,8 +41,8 @@
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -58,21 +58,21 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "NLog.Web.AspNetCore": {
               "target": "Package",
-              "version": "[5.3.2, )"
+              "version": "[5.3.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -98,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

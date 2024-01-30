@@ -1,8 +1,7 @@
-﻿namespace CarRentalAPI.Models.Queries
+﻿namespace CarRentalAPI.Models.Queries;
+
+public enum SortDirection
 {
-    public enum SortDirection
-    {
-        Ascending,
-        Descending
-    }
+    Ascending,
+    Descending
 }

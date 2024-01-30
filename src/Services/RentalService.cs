@@ -14,38 +14,22 @@ using static CarRentalAPI.Entities.RentalOffice;
 
 namespace CarRentalAPI.Services;
 
-public class RentalService : IRentalService
+public class RentalService(RentalDbContext dbContext, ILogHandler logHandler, IMapper mapper,
+        IAuthorizationService authorizationService, IUserContextService userContextService) : IRentalService
 {
     private const string entityName = "Rental";
-    public readonly RentalDbContext _dbContext;
-    public readonly IAuthorizationService _authorizationService;
-    public readonly ILogger<RentalService> _logger;
-    public readonly ILogHandler _logHandler;
-    public readonly IMapper _mapper;
-    public readonly IUserContextService _userContextService;
-
-    public RentalService(RentalDbContext dbContext, ILogger<RentalService> logger,ILogHandler logHandler , IMapper mapper, 
-        IAuthorizationService authorizationService, IUserContextService userContextService)
-    {
-        _authorizationService = authorizationService;
-        _dbContext = dbContext;
-        _logger = logger;
-        _logHandler = logHandler;
-        _mapper = mapper;
-        _userContextService = userContextService;
-    }
 
     public string CreateRental(CreateRentalOfficeDto dto)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
 
-        var rentalOffice = _mapper.Map<RentalOffice>(dto);
-        rentalOffice.OwnerId = _userContextService.GetUserId;
+        var rentalOffice = mapper.Map<RentalOffice>(dto);
+        rentalOffice.OwnerId = userContextService.GetUserId;
 
-        _dbContext.rentalOffices.Add(rentalOffice);
-        _dbContext.SaveChanges();
+        dbContext.rentalOffices.Add(rentalOffice);
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Created, rentalOffice.Id);
+        logHandler.LogAction(ILogHandler.ActionEnum.Created, rentalOffice.Id);
 
         string path = $"/api/rentaloffices/{rentalOffice.Id}";
         return path;
@@ -53,30 +37,30 @@ public class RentalService : IRentalService
 
     public void DeleteRental(int id)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.DELETE);
-        var rentalOffice = _dbContext.rentalOffices
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.DELETE);
+        var rentalOffice = dbContext.rentalOffices
             .FirstOrDefault(r => r.Id == id);
 
         NullRentalCheck(rentalOffice!, id);
 
-        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, rentalOffice, new ResourceOperationRequirement(ResourceOperation.Delete));
+        var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, rentalOffice, new ResourceOperationRequirement(ResourceOperation.Delete));
 
         if (!authorizationResult.Result.Succeeded)
         {
             throw new ForbidException();
         }
 
-        _dbContext.rentalOffices.Remove(rentalOffice!);
-        _dbContext.SaveChanges();
+        dbContext.rentalOffices.Remove(rentalOffice!);
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Deleted, rentalOffice!.Id);
+        logHandler.LogAction(ILogHandler.ActionEnum.Deleted, rentalOffice!.Id);
     }
 
     public PagedResult<PresentRentalOfficeDto> GetRentalAll(RentalQuery query)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
 
-        var fullQuery = _dbContext.
+        var fullQuery = dbContext.
             rentalOffices
             .Include(r => r.Address)
             .Include(r => r.Cars)
@@ -105,7 +89,7 @@ public class RentalService : IRentalService
             .Take(query.PageSize)
             .ToList();
 
-        var rentalDtos = _mapper.Map<List<PresentRentalOfficeDto>>(pagedQuery);
+        var rentalDtos = mapper.Map<List<PresentRentalOfficeDto>>(pagedQuery);
 
         var pagedResult = new PagedResult<PresentRentalOfficeDto>(rentalDtos, count, query.PageSize, query.PageNumber);
 
@@ -114,31 +98,31 @@ public class RentalService : IRentalService
 
     public PresentRentalOfficeDto GetRentalById(int id)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
-        var rentalOffice = _dbContext.rentalOffices
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.GET);
+        var rentalOffice = dbContext.rentalOffices
             .Include(r => r.Address)
             .Include(r => r.Cars)
             .FirstOrDefault(r => r.Id == id);
 
         NullRentalCheck(rentalOffice!, id);
 
-        var rentalDto = _mapper.Map<PresentRentalOfficeDto>(rentalOffice);
+        var rentalDto = mapper.Map<PresentRentalOfficeDto>(rentalOffice);
         return rentalDto;
 
     }
 
     public void PutRentalById(UpdateRentalOfficeDto dto, int id)
     {
-        _logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
+        logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
 
-        var rentalOffice = _dbContext.rentalOffices
+        var rentalOffice = dbContext.rentalOffices
             .Include(r => r.Address)
             .Include(r => r.Cars)
             .FirstOrDefault(r => r.Id == id);
 
         NullRentalCheck(rentalOffice!, id);
 
-        var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, rentalOffice, new ResourceOperationRequirement(ResourceOperation.Update));
+        var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, rentalOffice, new ResourceOperationRequirement(ResourceOperation.Update));
 
         if (!authorizationResult.Result.Succeeded)
         {
@@ -152,9 +136,9 @@ public class RentalService : IRentalService
         rentalOffice.ConntactEmail = dto.ConntactEmail;
         rentalOffice.ConntactNumber = dto.ConntactNumber;
 
-        _dbContext.SaveChanges();
+        dbContext.SaveChanges();
 
-        _logHandler.LogAction(ILogHandler.ActionEnum.Updated, rentalOffice.Id);
+        logHandler.LogAction(ILogHandler.ActionEnum.Updated, rentalOffice.Id);
     }
 
     private static void NullRentalCheck(RentalOffice rentalOffice, int id)

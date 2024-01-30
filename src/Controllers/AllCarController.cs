@@ -8,17 +8,12 @@ namespace CarRentalAPI.Controllers;
 [ApiController]
 [Route("all/cars")]
 [AllowAnonymous]
-public class AllCarController : ControllerBase
+public class AllCarController(ICarService carService) : ControllerBase
 {
-    private ICarService _carService;
-    public AllCarController(ICarService service) 
-    {
-        _carService = service;
-    }
 
     [HttpGet]
     public ActionResult GetAllCarsInBase([FromQuery] CarQuery query)
     {
-        return Ok(_carService.GetAllCarsInBase(query));
+        return Ok(carService.GetAllCarsInBase(query));
     }
 }

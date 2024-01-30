@@ -1,7 +1,6 @@
-﻿namespace CarRentalAPI.Configuration
+﻿namespace CarRentalAPI.Configuration;
+
+public class RentalDbContextConfiguration
 {
-    public class RentalDbContextConfiguration
-    {
-        public string? DatabaseConnectionString { get; set; }
-    }
+    public string? DatabaseConnectionString { get; set; }
 }

@@ -1,31 +1,19 @@
-using CarRentalAPI.Entities;
-using Microsoft.Extensions.Logging;
+namespace CarRentalAPI.Handlers;
 
-namespace CarRentalAPI.Handlers
+public class LogHandler(ILogger<LogHandler> logger) : ILogHandler
 {
-    public class LogHandler : ILogHandler
+    public void LogNewRequest(string objectType, ILogHandler.RequestEnum requestType)
     {
+        logger.LogInformation("New {0} {1} request received.", objectType, requestType);
+    }
 
-        private readonly ILogger _logger;
+    public void LogAction(ILogHandler.ActionEnum actionType, int rentalId)
+    {
+        logger.LogInformation("Rental with id {0} {1}", rentalId, actionType);
+    }
 
-        public LogHandler(ILogger<LogHandler> logger)
-        {
-            _logger = logger;
-        }
-
-        public void LogNewRequest(string objectType, ILogHandler.RequestEnum requestType)
-        {
-            _logger.LogInformation("New {0} {1} request received.", objectType, requestType);
-        }
-
-        public void LogAction(ILogHandler.ActionEnum actionType, int rentalId)
-        {
-            _logger.LogInformation("Rental with id {0} {1}", rentalId, actionType);
-        }
-
-        public void LogAction(ILogHandler.ActionEnum actionType, int rentalId, int carId)
-        {
-            _logger.LogInformation("Rental with id {0} car: {1} {2}", rentalId, carId, actionType);
-        }
+    public void LogAction(ILogHandler.ActionEnum actionType, int rentalId, int carId)
+    {
+        logger.LogInformation("Rental with id {0} car: {1} {2}", rentalId, carId, actionType);
     }
 }

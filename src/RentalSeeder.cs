@@ -1,5 +1,4 @@
 ﻿using CarRentalAPI.Entities;
-using CarRentalAPI.Handlers;
 
 namespace CarRentalAPI
 {

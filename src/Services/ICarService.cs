@@ -1,7 +1,6 @@
 using CarRentalAPI.Models;
 using CarRentalAPI.Models.Pagination;
 using CarRentalAPI.Models.Queries;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalAPI.Services;
 

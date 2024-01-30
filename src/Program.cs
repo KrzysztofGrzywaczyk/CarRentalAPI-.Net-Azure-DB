@@ -14,7 +14,6 @@ using NLog.Config;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-using System.Reflection;
 using CarRentalAPI.Authorization;
 using CarRentalAPI.Authorizationl;
 using CarRentalAPI.Models.Queries;

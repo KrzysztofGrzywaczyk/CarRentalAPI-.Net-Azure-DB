@@ -1,6 +1,5 @@
-﻿namespace CarRentalAPI.Models.Pagination
+﻿namespace CarRentalAPI.Models.Pagination;
+
+public class RentalQuery : PagedQuery
 {
-    public class RentalQuery : PagedQuery
-    {
-    }
 }

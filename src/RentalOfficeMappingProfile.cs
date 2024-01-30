@@ -9,9 +9,9 @@ namespace CarRentalAPI
         public RentalOfficeMappingProfile()
         {
             CreateMap<RentalOffice, PresentRentalOfficeDto>()
-                .ForMember(m => m.City, conf => conf.MapFrom(src => src.Address.City))
-                .ForMember(m => m.Street, conf => conf.MapFrom(src => src.Address.Street))
-                .ForMember(m => m.PostalCode, conf => conf.MapFrom(src => src.Address.PostalCode));
+                .ForMember(m => m.City, conf => conf.MapFrom(src => src.Address!.City))
+                .ForMember(m => m.Street, conf => conf.MapFrom(src => src.Address!.Street))
+                .ForMember(m => m.PostalCode, conf => conf.MapFrom(src => src.Address!.PostalCode));
 
             CreateMap<Car, PresentCarDto>();
 

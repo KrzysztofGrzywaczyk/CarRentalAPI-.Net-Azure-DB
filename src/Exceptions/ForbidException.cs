@@ -1,7 +1,5 @@
-﻿namespace CarRentalAPI.Exceptions
-{
-    public class ForbidException : Exception
-    {
+﻿namespace CarRentalAPI.Exceptions;
 
-    }
+public class ForbidException : Exception
+{
 }
