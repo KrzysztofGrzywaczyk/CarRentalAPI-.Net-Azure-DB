@@ -56,7 +56,7 @@ GET
 GET endpoints use **filtration (searching)** if any Search Phrase is provided:</br>
 \- searchPhrase - *string*
 
-Results can be sorted if any SortBy column-name is provided (specific for endpoint):
+Results can be sorted if any SortBy column-name is provided (specific for endpoint): </br>
 \- SortBy - *string*
 
 GET endpoints use **pagination** and the following data should be provided: </br>

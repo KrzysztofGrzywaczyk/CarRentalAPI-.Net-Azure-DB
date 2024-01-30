@@ -98,8 +98,19 @@ builder.Services.AddScoped<IValidator<RentalQuery>, RentalQueryValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy("FrontendClient", builder =>
+    {
+    builder.AllowAnyMethod()
+    .AllowAnyHeader()
+    .WithOrigins(config["AllowedOrigins"] ?? throw new ArgumentNullException(nameof(config), "Configuration is required to retrieve RentalDbContextConfig"));
+});
+});
+
 var app = builder.Build();
 
+app.UseCors("FrontendClient");
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<RentalSeeder>();

@@ -19,3 +19,5 @@
 *.manifest
 
 
+/.vs/slnx.sqlite
+/README.md.backup
