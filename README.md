@@ -84,3 +84,6 @@ Project is using: </br>
 \- few additional training/demonstration usages like regexes etc. </br>
 \- Validation for every key input data </br>
 \- auto mapping and data-transfer objects
+</br>
+
+Tests are in progress ...

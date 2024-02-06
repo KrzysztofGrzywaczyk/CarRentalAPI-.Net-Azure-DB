@@ -11,7 +11,6 @@ namespace CarRentalAPI.Controllers;
 [Authorize(Roles = "administrator,rentalOwner,employee")]
 public class CarsController(ICarService carService) : ControllerBase
 {
-
     [HttpGet]
     public ActionResult GetAllCarsInRental([FromRoute] int rentalId, [FromQuery] CarQuery query)
     {

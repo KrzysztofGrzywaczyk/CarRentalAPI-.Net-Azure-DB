@@ -18,6 +18,11 @@ public class RentalDbContext : DbContext
     {
         _ConnectionString = config.DatabaseConnectionString;
     }
+
+    public RentalDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -48,6 +53,9 @@ public class RentalDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(_ConnectionString, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(_ConnectionString, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
+        }
     }
 }
