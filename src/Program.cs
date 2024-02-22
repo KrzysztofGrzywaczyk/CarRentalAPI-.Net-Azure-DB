@@ -18,6 +18,7 @@ using CarRentalAPI.Authorization;
 using CarRentalAPI.Authorizationl;
 using CarRentalAPI.Models.Queries;
 using CarRentalAPI.Models.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 LogManager.Configuration = new XmlLoggingConfiguration("nlog.config");
 
@@ -84,7 +85,8 @@ builder.Services.AddTransient<ILogHandler, LogHandler>();
 builder.Services.AddTransient<IRentalService, RentalService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddSingleton(config.Get<RentalDbContextConfiguration>() ?? throw new ArgumentNullException(nameof(config), "Configuration is required to retrieve RentalDbContextConfig"));
-builder.Services.AddDbContext<RentalDbContext>();
+builder.Services.AddDbContext<RentalDbContext>(
+            options => options.UseSqlServer(config.Get<RentalDbContextConfiguration>()!.DatabaseConnectionString), ServiceLifetime.Transient);
 builder.Services.AddScoped<RentalSeeder>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();

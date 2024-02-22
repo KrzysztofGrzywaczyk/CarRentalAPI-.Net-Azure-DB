@@ -1,6 +1,7 @@
 using CarRentalAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CarRentalAPI.Entities;
 
 public class RentalDbContext : DbContext
@@ -14,12 +15,7 @@ public class RentalDbContext : DbContext
     public DbSet<User> users { get; set; }
     public DbSet<Role> roles { get; set; }
 
-    public RentalDbContext(RentalDbContextConfiguration config)
-    {
-        _ConnectionString = config.DatabaseConnectionString;
-    }
-
-    public RentalDbContext(DbContextOptions options) : base(options)
+    public RentalDbContext(DbContextOptions<RentalDbContext> options) : base(options)
     {
     }
 
@@ -48,14 +44,5 @@ public class RentalDbContext : DbContext
             .Property(r => r.Name)
             .IsRequired()
             .HasMaxLength(30);
-
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(_ConnectionString, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
-        }
     }
 }

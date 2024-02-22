@@ -165,11 +165,12 @@ public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapp
 
         var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, carEntity, new ResourceOperationRequirement(ResourceOperation.Update));
 
-        if (authorizationResult.Result.Succeeded)
+        if (!authorizationResult.Result.Succeeded)
         {
             throw new ForbidException();
         }
 
+        _ = GetCarIfExist(rentalId, carId);
 
         carEntity!.PlateNumber = dto.PlateNumber;
         carEntity!.Brand = dto.Brand;

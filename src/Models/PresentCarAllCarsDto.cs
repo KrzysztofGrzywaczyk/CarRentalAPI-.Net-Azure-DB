@@ -14,5 +14,5 @@ public class PresentCarAllCarsDto
 
     public char Segment { get; set; }
 
-    public int rentalOfficeId { get; set; }
+    public int RentalOfficeId { get; set; }
 }

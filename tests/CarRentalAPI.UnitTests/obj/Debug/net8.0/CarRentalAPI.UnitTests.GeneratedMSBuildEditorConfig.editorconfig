@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = CarRentalAPI.UnitTests
-build_property.ProjectDir = C:\Users\grzywaczykk\PRIVATE\CarRentalAPI\tests\CarRentalAPI.UnitTests\
+build_property.ProjectDir = C:\Users\grzywaczykk\PRIVATE\2\tests\CarRentalAPI.UnitTests\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

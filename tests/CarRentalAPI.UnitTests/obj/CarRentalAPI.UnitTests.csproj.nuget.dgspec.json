@@ -1,36 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj": {}
+    "C:\\Users\\grzywaczykk\\PRIVATE\\2\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj": {
+    "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj",
         "projectName": "CarRentalAPI",
-        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj",
+        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj",
         "packagesPath": "C:\\Users\\grzywaczykk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\obj\\",
+        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
           "C:\\Users\\grzywaczykk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -38,11 +34,16 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -58,21 +59,21 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.0.1, )"
             },
             "NLog.Web.AspNetCore": {
               "target": "Package",
-              "version": "[5.3.2, )"
+              "version": "[5.3.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -98,25 +99,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj": {
+    "C:\\Users\\grzywaczykk\\PRIVATE\\2\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj",
+        "projectUniqueName": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj",
         "projectName": "CarRentalAPI.UnitTests",
-        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj",
+        "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\tests\\CarRentalAPI.UnitTests\\CarRentalAPI.UnitTests.csproj",
         "packagesPath": "C:\\Users\\grzywaczykk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\tests\\CarRentalAPI.UnitTests\\obj\\",
+        "outputPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\tests\\CarRentalAPI.UnitTests\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
           "C:\\Users\\grzywaczykk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -130,8 +127,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj": {
-                "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\CarRentalAPI\\src\\CarRentalAPI.csproj"
+              "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj": {
+                "projectPath": "C:\\Users\\grzywaczykk\\PRIVATE\\2\\src\\CarRentalAPI.csproj"
               }
             }
           }
@@ -140,6 +137,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -150,9 +152,17 @@
               "target": "Package",
               "version": "[6.12.0, )"
             },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.6.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.70, )"
             },
             "coverlet.collector": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -187,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
