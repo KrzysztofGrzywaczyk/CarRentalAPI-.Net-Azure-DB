@@ -5,6 +5,7 @@ namespace CarRentalAPI.Models.Validators;
 
 public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {
+    public readonly string emailInUseMessage = "That email is already in use.";
     public CreateUserValidator(RentalDbContext dbContext)
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
@@ -18,7 +19,7 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
             var isEmailUsed = dbContext.users.Any(u => u.Email == value);
             if (isEmailUsed) 
             {
-                context.AddFailure("Email", "That email is already in use.");
+                context.AddFailure("Email", emailInUseMessage);
             }
         });
     }

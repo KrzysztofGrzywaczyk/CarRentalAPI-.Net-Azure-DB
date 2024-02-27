@@ -12,7 +12,8 @@ public class RentalQueryValidator : AbstractValidator<RentalQuery>
         nameof(RentalOffice.Name),
         nameof(RentalOffice.Category),
         nameof(RentalOffice.AcceptUnder23),
-        nameof(RentalOffice.AddressID)
+        nameof(RentalOffice.AddressId),
+        nameof(RentalOffice.OwnerId)
     };
 
     public RentalQueryValidator()

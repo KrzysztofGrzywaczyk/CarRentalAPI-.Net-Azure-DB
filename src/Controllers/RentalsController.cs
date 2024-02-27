@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CarRentalAPI.Entities;
-using CarRentalAPI.Services;
+﻿using CarRentalAPI.Services;
 using CarRentalAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;

@@ -27,7 +27,7 @@ public class RentalOffice
 
     public virtual User? Owner { get; set; }
 
-    public int AddressID { get; set; }
+    public int AddressId { get; set; }
 
     public virtual Address? Address { get; set; }
 

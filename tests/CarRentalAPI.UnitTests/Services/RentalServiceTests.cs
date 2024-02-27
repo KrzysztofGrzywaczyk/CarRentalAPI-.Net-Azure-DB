@@ -122,7 +122,7 @@ public class RentalServiceTests : UnitTestsBase<RentalServiceTestsContext>
         entity.AcceptUnder23.Should().Be(Context.TestRentalOffice.AcceptUnder23);
         entity.ConntactEmail.Should().Be(Context.TestRentalOffice.ConntactEmail);
         entity.ConntactNumber.Should().Be(Context.TestRentalOffice.ConntactNumber);
-        entity.AddressID.Should().Be(Context.TestRentalOffice.Address.Id);
+        entity.AddressId.Should().Be(Context.TestRentalOffice.Address.Id);
     }
 
     [Fact]

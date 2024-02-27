@@ -76,7 +76,7 @@ public class RentalService(RentalDbContext dbContext, ILogHandler logHandler, IM
                 { nameof(RentalOffice.Name), r => r.Name! },
                 { nameof(RentalOffice.Category), r => r.Category! },
                 { nameof(RentalOffice.AcceptUnder23), r => r.AcceptUnder23 },
-                { nameof(RentalOffice.AddressID), r => r.AddressID }
+                { nameof(RentalOffice.AddressId), r => r.AddressId }
             };
 
             var selectedColumn = selector[query.SortBy];

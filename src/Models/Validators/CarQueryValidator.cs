@@ -18,7 +18,7 @@ public class CarQueryValidator : AbstractValidator<CarQuery>
    
     public CarQueryValidator()
     {
-        RuleFor(r => r.SortBy)
+        RuleFor(c => c.SortBy)
             .Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnes.Contains(value))
             .WithMessage($"Sort by is optional. If you want to use sorting options you need to use one of proper column names: ({string.Join(", ",allowedSortByColumnes)}) ");
     }

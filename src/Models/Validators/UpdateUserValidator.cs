@@ -5,7 +5,7 @@ namespace CarRentalAPI.Models.Validators;
 
 public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
 {
-    public UpdateUserValidator(RentalDbContext dbContext)
+    public UpdateUserValidator()
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
 
