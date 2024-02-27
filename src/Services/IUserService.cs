@@ -1,4 +1,5 @@
 ﻿using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
 
 namespace CarRentalAPI.Services;
 
@@ -10,7 +11,7 @@ public interface IUserService
 
     public string GenerateToken (LoginDto loginDto);
 
-    public List<PresentUserDto> GetAllUsers();
+    public PagedResult<PresentUserDto> GetAllUsers(UserQuery query);
 
     public PresentUserDto GetUserById(int userId);
 

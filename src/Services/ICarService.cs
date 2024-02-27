@@ -6,7 +6,7 @@ namespace CarRentalAPI.Services;
 
 public interface ICarService
 {
-    public string CreateCar(int rentalID, CreateCarDto dto);
+    public string CreateCar(int rentalID, CreateUpdateCarDto dto);
 
     public void DeleteCar(int rentalID, int carId);
 
@@ -16,5 +16,5 @@ public interface ICarService
 
     public PresentCarDto GetCarById(int rentalId, int carId);
 
-    public string PutCar(int rentalId, int carId, CreateCarDto dto);
+    public string PutCar(int rentalId, int carId, CreateUpdateCarDto dto);
 }

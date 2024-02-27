@@ -77,13 +77,14 @@ Project is using: </br>
 \- Entity framework for Database querries </br>
 \- JWT Bearer Authentication </br>
 \- Self-implemented authorization </br>
-\- Self-implemented paging and record filtration.
+\- Self-implemented paging and record filtration. </br>
 \- NLog logging to file </br>
 \- Self-implemented middlewares </br>
-\- X-unit Unit and Integration tests are work-in progress </br>
+\- X-unit unit tests
+\- X-unit integration tests are work-in progress </br>
 \- few additional training/demonstration usages like regexes etc. </br>
 \- Validation for every key input data </br>
 \- auto mapping and data-transfer objects
 </br>
 
-Tests are in progress ...
+Integration tests are in progress ...

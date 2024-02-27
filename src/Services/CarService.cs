@@ -17,7 +17,11 @@ public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapp
 {
     private const string entityName = "Car";
 
-    public string CreateCar(int rentalId, CreateCarDto dto)
+    public readonly string rentalNotFoundMessage = "Not found rental office with given id.";
+
+    public readonly string carNotFoundMessage = "Not found car with given Id in given rental.";
+
+    public string CreateCar(int rentalId, CreateUpdateCarDto dto)
     {
         logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.POST);
 
@@ -155,7 +159,7 @@ public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapp
         return carDto;
     }
 
-    public string PutCar(int rentalId, int carId, CreateCarDto dto)
+    public string PutCar(int rentalId, int carId, CreateUpdateCarDto dto)
     {
         logHandler.LogNewRequest(entityName, ILogHandler.RequestEnum.PUT);
 
@@ -193,7 +197,7 @@ public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapp
         var renatlOffice = dbContext.rentalOffices.FirstOrDefault(r => r.Id == rentalId);
         if (renatlOffice is null)
         {
-            throw new NotFoundException("Not found rental office with given id.");
+            throw new NotFoundException(rentalNotFoundMessage);
         }
         return renatlOffice;
     }
@@ -203,7 +207,7 @@ public class CarService(RentalDbContext dbContext, ILogHandler logHandler, IMapp
         var carEntity = dbContext.cars.FirstOrDefault(c => c.RentalOfficeId == rentalId && c.Id == carId);
         if (carEntity is null)
         {
-            throw new NotFoundException("Not found car with given Id in given rental.");
+            throw new NotFoundException(carNotFoundMessage);
         }
         return carEntity;
     }

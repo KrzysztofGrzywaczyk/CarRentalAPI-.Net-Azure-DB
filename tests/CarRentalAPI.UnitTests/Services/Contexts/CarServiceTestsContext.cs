@@ -55,19 +55,22 @@ namespace CarRentalAPI.UnitTests.Services.Contexts
             await base.DisposeAsync();
         }
 
-        public void WithCarCreatedInRentalOffice(int testRentalOffice)
+        public void WithCarCreatedInRentalOffice(int testRentalOfficeId)
         {
-            var createCarDto = new CreateCarDto
+            var car = new Car
             {
                 PlateNumber = TestCar.PlateNumber,
                 Brand = TestCar.Brand,
                 Model = TestCar.Model,
                 Year = TestCar.Year,
-                Fuel = nameof(Car.FuelType.Gas),
-                Segment = TestCar.Segment
+                Fuel = Car.FuelType.Gas,
+                Segment = TestCar.Segment,
+                RentalOfficeId = testRentalOfficeId
             };
 
-            Service.CreateCar(testRentalOffice, createCarDto);
+            DbContext.cars.Add(car);
+            DbContext.SaveChanges();
+            
         }
 
         private void AddRentalOfficeToDatabase()
@@ -104,7 +107,7 @@ namespace CarRentalAPI.UnitTests.Services.Contexts
             var mockMapper = new Mock<IMapper>();
 
             // setup Create mapping
-            mockMapper.Setup(m => m.Map<Car>(It.IsAny<CreateCarDto>())).Returns((CreateCarDto dto) =>
+            mockMapper.Setup(m => m.Map<Car>(It.IsAny<CreateUpdateCarDto>())).Returns((CreateUpdateCarDto dto) =>
             {
                 return new Car
                 {

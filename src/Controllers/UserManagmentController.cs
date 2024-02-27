@@ -1,4 +1,5 @@
 ﻿using CarRentalAPI.Models;
+using CarRentalAPI.Models.Pagination;
 using CarRentalAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ public class UserManagmentController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("all")]
-    public ActionResult GetAllUsers()
+    public ActionResult GetAllUsers([FromQuery] UserQuery query)
     {
-        return Ok(userService.GetAllUsers());
+        return Ok(userService.GetAllUsers(query));
     }
 
     [HttpGet("{userId}")]

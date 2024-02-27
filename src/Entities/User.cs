@@ -12,7 +12,7 @@ public class User
 
     public string? LastName { get; set; }
 
-    public DateTime DateofBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
 
     public string? HashedPassword { get; set; }
 

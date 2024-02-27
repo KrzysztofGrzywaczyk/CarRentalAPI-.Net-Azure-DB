@@ -17,7 +17,7 @@ namespace CarRentalAPI
 
             CreateMap<Car, PresentCarAllCarsDto>();
 
-            CreateMap<CreateCarDto, Car>();
+            CreateMap<CreateUpdateCarDto, Car>();
 
             CreateMap<CreateRentalOfficeDto, RentalOffice>()
                 .ForMember(r => r.Address, conf => conf.MapFrom(dto => new Address()

@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using CarRentalAPI.Entities;
 using CarRentalAPI.Handlers;
 using CarRentalAPI.Models;
@@ -58,20 +57,19 @@ public class RentalServiceTestsContext : UnitTestsContextBase
 
     public void WithRentalOfficeCreatedInDatabase()
     {
-        var rentalDto = new CreateRentalOfficeDto
+        var rentalOffice = new RentalOffice
         {
             Name = TestRentalOffice.Name,
             Description = TestRentalOffice.Description,
-            Category = nameof(TestRentalOffice.Category),
+            Category = TestRentalOffice.Category,
             AcceptUnder23 = TestRentalOffice.AcceptUnder23,
             ConntactEmail = TestRentalOffice.ConntactEmail,
             ConntactNumber = TestRentalOffice.ConntactNumber,
-            City = TestRentalOffice!.Address!.City,
-            Street = TestRentalOffice!.Address!.Street,
-            PostalCode = TestRentalOffice!.Address.PostalCode
+            Address = TestRentalOffice.Address
         };
 
-        Service.CreateRental(rentalDto);
+        DbContext.rentalOffices.Add(rentalOffice);
+        DbContext.SaveChanges();
     }
 
     private Mock<IMapper> SetupMockMapper()
@@ -92,7 +90,40 @@ public class RentalServiceTestsContext : UnitTestsContextBase
             };
         });
 
+        // setup Get mapping
+        mockMapper.Setup(m => m.Map<PresentRentalOfficeDto>(It.IsAny<RentalOffice>())).Returns((RentalOffice rentalOffice) =>
+        {
+            return new PresentRentalOfficeDto
+            {
+                Id = rentalOffice.Id,
+                Name = rentalOffice.Name,
+                Description = rentalOffice.Description,
+                Category = rentalOffice.Category.ToString(),
+                AcceptUnder23 = rentalOffice.AcceptUnder23,
+                City = rentalOffice.Address?.City,
+                Street = rentalOffice.Address?.Street,
+                PostalCode = rentalOffice.Address?.PostalCode
+            };
+        });
 
+        // setup GetAll mapping
+        mockMapper.Setup(m => m.Map<List<PresentRentalOfficeDto>>(It.IsAny<List<RentalOffice>>())).Returns((List<RentalOffice> dtoList) =>
+        {
+            return new List<PresentRentalOfficeDto>
+            {
+                new PresentRentalOfficeDto
+                {
+                Id = dtoList.First().Id,
+                Name = dtoList.First().Name,
+                Description = dtoList.First().Description,
+                Category = dtoList.First().Category.ToString(),
+                AcceptUnder23 = dtoList.First().AcceptUnder23,
+                City = dtoList.First().Address?.City,
+                Street = dtoList.First().Address ?.Street,
+                PostalCode = dtoList.First().Address ?.PostalCode
+                }
+            };
+        });
 
         return mockMapper;
     }

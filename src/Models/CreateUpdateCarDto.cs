@@ -4,7 +4,7 @@ using static CarRentalAPI.Entities.Car;
 
 namespace CarRentalAPI.Models;
 
-public class CreateCarDto
+public class CreateUpdateCarDto
 {
     [Required]
     [MaxLength(9)]

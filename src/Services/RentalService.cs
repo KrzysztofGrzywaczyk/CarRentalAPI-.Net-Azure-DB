@@ -9,7 +9,6 @@ using CarRentalAPI.Models.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using static CarRentalAPI.Entities.RentalOffice;
 
 namespace CarRentalAPI.Services;
@@ -65,7 +64,8 @@ public class RentalService(RentalDbContext dbContext, ILogHandler logHandler, IM
             .Include(r => r.Address)
             .Include(r => r.Cars)
             .Where(r => query.SearchPhrase == null ||
-            (r.Name!.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description!.ToLower().Contains(query.SearchPhrase.ToLower())));
+            (r.Name!.ToLower().Contains(query.SearchPhrase.ToLower()) || 
+            r.Description!.ToLower().Contains(query.SearchPhrase.ToLower())));
 
         var count = fullQuery.Count();
 
@@ -135,6 +135,9 @@ public class RentalService(RentalDbContext dbContext, ILogHandler logHandler, IM
         rentalOffice.AcceptUnder23 = dto.AcceptUnder23;
         rentalOffice.ConntactEmail = dto.ConntactEmail;
         rentalOffice.ConntactNumber = dto.ConntactNumber;
+        rentalOffice.Address!.City = dto.City;
+        rentalOffice.Address.Street = dto.Street;
+        rentalOffice.Address.PostalCode = dto.PostalCode;
 
         dbContext.SaveChanges();
 
@@ -145,7 +148,7 @@ public class RentalService(RentalDbContext dbContext, ILogHandler logHandler, IM
     {
         if (rentalOffice == null)
         {
-            throw new FileNotFoundException($"Rental with id {id} not found");
+            throw new NotFoundException($"Rental with id {id} not found");
         }
     }
 }

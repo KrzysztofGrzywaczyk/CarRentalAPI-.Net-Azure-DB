@@ -24,7 +24,7 @@ public class CarsController(ICarService carService) : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateCar([FromRoute] int rentalId, [FromBody] CreateCarDto dto)
+    public ActionResult CreateCar([FromRoute] int rentalId, [FromBody] CreateUpdateCarDto dto)
     {
         var path = carService.CreateCar(rentalId, dto);
         return Created(path, null);
@@ -38,7 +38,7 @@ public class CarsController(ICarService carService) : ControllerBase
     }
 
     [HttpPut("{carId}")]
-    public ActionResult PutCar([FromRoute] int rentalId, [FromRoute] int carId, [FromBody] CreateCarDto dto)
+    public ActionResult PutCar([FromRoute] int rentalId, [FromRoute] int carId, [FromBody] CreateUpdateCarDto dto)
     {
         if (!ModelState.IsValid)
         {
